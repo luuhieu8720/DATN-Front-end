@@ -10,3 +10,18 @@
 button.dark {
   color: rgb(48, 141, 196);
 }
+.card-tutor-info {
+  margin-top: 5%;
+  margin-left: 15%;
+  width: 90%;
+  height: 90%;
+  border-radius: 20px;
+}
+.position-abs{
+  position: absolute;
+}
+
+.list-checkin {
+  top: 0px;
+  left: 51.5%;
+}

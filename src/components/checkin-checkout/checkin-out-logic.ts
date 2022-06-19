@@ -20,6 +20,9 @@ export default function CheckInOutLogic() {
         clientService.timekeepingPOST(timeKeepingForm)
             .then((res) => {
                 toast.success("Successfully check-in");
+                setTimeout(() => {
+                    history("/checkin-checkout");
+                }, 3000);
                 return (res);
             })
             .catch(function (error) {
@@ -37,7 +40,7 @@ export default function CheckInOutLogic() {
             .then((res) => {
                 toast.success("Successfully check-out");
                 setTimeout(() => {
-                    history("/");
+                    history("/checkin-checkout");
                 }, 3000);
             })
             .catch(function (error) {
@@ -63,9 +66,7 @@ export default function CheckInOutLogic() {
     const validateCheckinToday = (userId: string) => {
         clientService.validate(userId)
             .then((res) => {
-                setResult("hello");
-                console.log(res)
-                console.log(result)
+
             })
             .catch(function (error) {
                 if (error.response == "This user didnt checkin today") {

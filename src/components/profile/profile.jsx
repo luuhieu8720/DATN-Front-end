@@ -94,19 +94,16 @@ export default function Profile() {
         <div className="container bootstrap snippet">
             <ToastContainer />
             <div className="row">
-                <div className="col-sm-10"><h1>{currentUser.username}</h1></div>
-                <div className="col-sm-2"><a href="/users" className="pull-right"></a></div>
-            </div>
-            <div className="row">
                 <div className="col-sm-3">
                     <div className="text-center">
+                        <div className="col-sm-10 mt-4 ms-3"><h5>{currentUser.username}</h5></div>
                         <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" className="avatar img-circle img-thumbnail" alt="avatar" />
                         <h6>Upload a different photo...</h6>
                         <Form.Control type="file" className="text-center center-block file-upload" />
                     </div>
 
                 </div>
-                <div className="col-sm-9">
+                <div className="col-sm-9 mt-4">
                     <div className="tab-content">
                         <Form.Group id="registrationForm" className="form-group">
                             <div className="col-xs-6">

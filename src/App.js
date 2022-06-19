@@ -9,6 +9,9 @@ import UpdatePassword from "./components/profile/update-password";
 import ListRequests from "./components/requests/list-requests";
 import DashBoard from "./components/home/dashboard";
 import ListReports from "./components/reports/list-reports";
+import UserList from "./components/user-management/user-list";
+import ReportDetailPage from "./components/reports/report-detail";
+import Example from "./pages/test";
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
           <Route exact path="/password" element={<UpdatePassword />}></Route>
           <Route exact path="/list-requests" element={<ListRequests />}></Route>
           <Route exact path="/list-reports" element={<ListReports />}></Route>
+          <Route exact path="/list-users" element={<UserList />}></Route>
+          <Route exact path="/report-detail/:id" element={<ReportDetailPage />}></Route>
+          <Route exact path="/test" element={<Example />}></Route>
         </Route>
         <Route exact path="/login" element={<Login />}></Route>
       </Routes>

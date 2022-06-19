@@ -2,45 +2,41 @@ import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
 import { Client } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
-import { Table, Button } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import moment from "moment";
 
-export default function ListRequests() {
-    const [listRequests, setListRequests] = useState([]);
+export default function ListCheckin(props) {
+    var userId = props.userId;
+    const [listCheckin, setListCheckin] = useState([]);
     var numberedItem = 0;
     const Items = ({ currentItems }) => {
         return (
-            <div>
-                <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
-                    <h3 className="text-center">My request list</h3>
-                    <Table striped bordered hover className="mt-4" >
-                        <thead >
-                            <tr>
-                                <th style={{ width: "50px" }}>#</th>
-                                <th style={{ width: "300px" }}>Content</th>
-                                <th style={{ width: "300px" }}>Reason</th>
-                                <th style={{ width: "200px" }}>Submitted time</th>
-                                <th style={{ width: "200px" }}>Updated time</th>
-                                <th style={{ width: "100px" }}>Status</th>
-                            </tr>
-                        </thead>
-                        {
-                            currentItems &&
-                            currentItems.map((item) => (
+            <div className="mt-4">
+                <h3 className="text-center">Working timesheets</h3>
+                <Table striped bordered hover className="mt-4" >
+                    <thead >
+                        <tr>
+                            <th style={{ width: "40px" }}>#</th>
+                            <th style={{ width: "200px" }}>Date</th>
+                            <th style={{ width: "200px" }}>Checkin time</th>
+                            <th style={{ width: "200px" }}>Checkout time</th>
+                        </tr>
+                    </thead>
+                    {
+                        currentItems &&
+                        currentItems.map((item) => {
+                            return (
                                 <tbody>
                                     <tr>
                                         <td>{numberedItem++}</td>
-                                        <td>{item.content}</td>
-                                        <td>{item.reason}</td>
-                                        <td>{moment(item.submittedTime).format('DD-MM-YYYY')}</td>
-                                        <td>{moment(item.updatedTime).format('DD-MM-YYYY')}</td>
-                                        <td>{item.formStatus.status}</td>
+                                        <td>{moment(item.checkinTime).format('DD-MM-YYYY')}</td>
+                                        <td>{moment(item.checkinTime).format('hh:mm:ss A')}</td>
+                                        <td>{item.checkoutTime ? moment(item.checkoutTime).format('hh:mm:ss A') : ""}</td>
                                     </tr>
                                 </tbody>
-
-                            ))}
-                    </Table>
-                </div>
+                            )
+                        })}
+                </Table>
             </div>
         );
     }
@@ -56,10 +52,9 @@ export default function ListRequests() {
 
     useEffect(() => {
         numberedItem = 0;
-        clientService.requestAll()
+        clientService.timekeepingAll2(userId)
             .then((res) => {
-                setListRequests(res);
-                console.log(listRequests)
+                setListCheckin(res);
             })
             .catch(function (error) {
                 if (error.response) {
@@ -68,17 +63,13 @@ export default function ListRequests() {
             });
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-        setCurrentItems(listRequests.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(listRequests.length / itemsPerPage));
-    }, [itemOffset, itemsPerPage, listRequests.length]);
+        setCurrentItems(listCheckin.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(listCheckin.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, listCheckin.length]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % listRequests.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
+        const newOffset = (event.selected * itemsPerPage) % listCheckin.length;
         setItemOffset(newOffset);
     };
 
@@ -88,12 +79,12 @@ export default function ListRequests() {
             <div>
                 <Items currentItems={currentItems} />
             </div>
-            <div style={{ marginLeft: "50%" }}>
+            <div style={{marginLeft:"40%"}}>
                 <ReactPaginate
                     breakLabel="..."
                     nextLabel=">"
                     onPageChange={handlePageClick}
-                    pageRangeDisplayed={8}
+                    pageRangeDisplayed={10}
                     pageCount={pageCount}
                     previousLabel="<"
                     renderOnZeroPageCount={null}
@@ -109,7 +100,6 @@ export default function ListRequests() {
                     activeClassName={'active'}
                 />
             </div>
-            <Button>Send request</Button>
         </div>
     );
 }

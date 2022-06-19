@@ -746,7 +746,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    reportsPOST(body: ReportForm | undefined): Promise<void> {
+    reportsPOST(body: ReportFormDto | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/reports";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -783,7 +783,7 @@ export class Client {
     /**
      * @return Success
      */
-    reportsGET(id: string): Promise<void> {
+    reportsGET(id: string): Promise<ReportDetail> {
         let url_ = this.baseUrl + "/api/reports/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -793,6 +793,7 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "text/plain"
             }
         };
 
@@ -801,26 +802,29 @@ export class Client {
         });
     }
 
-    protected processReportsGET(response: Response): Promise<void> {
+    protected processReportsGET(response: Response): Promise<ReportDetail> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ReportDetail.fromJS(resultData200);
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ReportDetail>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    reportsPUT(id: string, body: ReportForm | undefined): Promise<void> {
+    reportsPUT(id: string, body: ReportFormDto | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/reports/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1478,6 +1482,12 @@ export interface ILoginForm {
     password: string;
 }
 
+export enum Role {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+}
+
 export class TokenResponse implements ITokenResponse {
     token?: string | undefined;
     userId?: string;
@@ -1485,6 +1495,7 @@ export class TokenResponse implements ITokenResponse {
     lastName?: string | undefined;
     email?: string | undefined;
     username?: string | undefined;
+    role?: Role;
 
     constructor(data?: ITokenResponse) {
         if (data) {
@@ -1503,6 +1514,7 @@ export class TokenResponse implements ITokenResponse {
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.username = _data["username"];
+            this.role = _data["role"];
         }
     }
 
@@ -1521,6 +1533,7 @@ export class TokenResponse implements ITokenResponse {
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["username"] = this.username;
+        data["role"] = this.role;
         return data;
     }
 }
@@ -1532,6 +1545,7 @@ export interface ITokenResponse {
     lastName?: string | undefined;
     email?: string | undefined;
     username?: string | undefined;
+    role?: Role;
 }
 
 export class AuthenUser implements IAuthenUser {
@@ -1540,6 +1554,7 @@ export class AuthenUser implements IAuthenUser {
     lastName?: string | undefined;
     email?: string | undefined;
     username?: string | undefined;
+    role?: Role;
 
     constructor(data?: IAuthenUser) {
         if (data) {
@@ -1557,6 +1572,7 @@ export class AuthenUser implements IAuthenUser {
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.username = _data["username"];
+            this.role = _data["role"];
         }
     }
 
@@ -1574,6 +1590,7 @@ export class AuthenUser implements IAuthenUser {
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["username"] = this.username;
+        data["role"] = this.role;
         return data;
     }
 }
@@ -1584,6 +1601,7 @@ export interface IAuthenUser {
     lastName?: string | undefined;
     email?: string | undefined;
     username?: string | undefined;
+    role?: Role;
 }
 
 export class CommentForm implements ICommentForm {
@@ -1766,12 +1784,6 @@ export interface IDepartment {
     manager?: User;
 }
 
-export enum Role {
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-}
-
 export class ForgetPassword implements IForgetPassword {
     id?: string;
     userId?: string;
@@ -1834,6 +1846,7 @@ export class User implements IUser {
     password?: string | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     departmentId?: string | undefined;
     department?: Department;
     role?: Role;
@@ -1859,6 +1872,7 @@ export class User implements IUser {
             this.password = _data["password"];
             this.phone = _data["phone"];
             this.address = _data["address"];
+            this.avatarUrl = _data["avatarUrl"];
             this.departmentId = _data["departmentId"];
             this.department = _data["department"] ? Department.fromJS(_data["department"]) : <any>undefined;
             this.role = _data["role"];
@@ -1888,6 +1902,7 @@ export class User implements IUser {
         data["password"] = this.password;
         data["phone"] = this.phone;
         data["address"] = this.address;
+        data["avatarUrl"] = this.avatarUrl;
         data["departmentId"] = this.departmentId;
         data["department"] = this.department ? this.department.toJSON() : <any>undefined;
         data["role"] = this.role;
@@ -1910,6 +1925,7 @@ export interface IUser {
     password?: string | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     departmentId?: string | undefined;
     department?: Department;
     role?: Role;
@@ -2013,6 +2029,7 @@ export class UserDetail implements IUserDetail {
     username?: string | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     password?: string | undefined;
     departmentId?: string | undefined;
     department?: Department;
@@ -2037,6 +2054,7 @@ export class UserDetail implements IUserDetail {
             this.username = _data["username"];
             this.phone = _data["phone"];
             this.address = _data["address"];
+            this.avatarUrl = _data["avatarUrl"];
             this.password = _data["password"];
             this.departmentId = _data["departmentId"];
             this.department = _data["department"] ? Department.fromJS(_data["department"]) : <any>undefined;
@@ -2061,6 +2079,7 @@ export class UserDetail implements IUserDetail {
         data["username"] = this.username;
         data["phone"] = this.phone;
         data["address"] = this.address;
+        data["avatarUrl"] = this.avatarUrl;
         data["password"] = this.password;
         data["departmentId"] = this.departmentId;
         data["department"] = this.department ? this.department.toJSON() : <any>undefined;
@@ -2078,6 +2097,7 @@ export interface IUserDetail {
     username?: string | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     password?: string | undefined;
     departmentId?: string | undefined;
     department?: Department;
@@ -2339,7 +2359,7 @@ export interface IUpdatePasswordForm {
 export class Report implements IReport {
     id?: string;
     createdTime?: Date;
-    updatedTime?: Date;
+    updatedTime?: Date | undefined;
     uploadFileLink?: string | undefined;
     content?: string | undefined;
     userId?: string;
@@ -2400,7 +2420,7 @@ export class Report implements IReport {
 export interface IReport {
     id?: string;
     createdTime?: Date;
-    updatedTime?: Date;
+    updatedTime?: Date | undefined;
     uploadFileLink?: string | undefined;
     content?: string | undefined;
     userId?: string;
@@ -2461,11 +2481,13 @@ export interface IComment {
 }
 
 export class ReportItem implements IReportItem {
+    id?: string;
     createdTime?: Date;
-    updatedTime?: Date;
+    updatedTime?: Date | undefined;
     uploadFileLink?: string | undefined;
     content?: string | undefined;
     userId?: string;
+    user?: User;
     comments?: Comment[] | undefined;
 
     constructor(data?: IReportItem) {
@@ -2479,11 +2501,13 @@ export class ReportItem implements IReportItem {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.createdTime = _data["createdTime"] ? new Date(_data["createdTime"].toString()) : <any>undefined;
             this.updatedTime = _data["updatedTime"] ? new Date(_data["updatedTime"].toString()) : <any>undefined;
             this.uploadFileLink = _data["uploadFileLink"];
             this.content = _data["content"];
             this.userId = _data["userId"];
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : <any>undefined;
             if (Array.isArray(_data["comments"])) {
                 this.comments = [] as any;
                 for (let item of _data["comments"])
@@ -2501,11 +2525,13 @@ export class ReportItem implements IReportItem {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["createdTime"] = this.createdTime ? this.createdTime.toISOString() : <any>undefined;
         data["updatedTime"] = this.updatedTime ? this.updatedTime.toISOString() : <any>undefined;
         data["uploadFileLink"] = this.uploadFileLink;
         data["content"] = this.content;
         data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         if (Array.isArray(this.comments)) {
             data["comments"] = [];
             for (let item of this.comments)
@@ -2516,22 +2542,24 @@ export class ReportItem implements IReportItem {
 }
 
 export interface IReportItem {
+    id?: string;
     createdTime?: Date;
-    updatedTime?: Date;
+    updatedTime?: Date | undefined;
     uploadFileLink?: string | undefined;
     content?: string | undefined;
     userId?: string;
+    user?: User;
     comments?: Comment[] | undefined;
 }
 
-export class ReportForm implements IReportForm {
+export class ReportFormDto implements IReportFormDto {
     createdTime?: Date;
-    updatedTime?: Date;
-    file?: string | undefined;
+    updatedTime?: Date | undefined;
+    uploadFileLink?: string | undefined;
     content?: string | undefined;
     userId?: string;
 
-    constructor(data?: IReportForm) {
+    constructor(data?: IReportFormDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2544,15 +2572,15 @@ export class ReportForm implements IReportForm {
         if (_data) {
             this.createdTime = _data["createdTime"] ? new Date(_data["createdTime"].toString()) : <any>undefined;
             this.updatedTime = _data["updatedTime"] ? new Date(_data["updatedTime"].toString()) : <any>undefined;
-            this.file = _data["file"];
+            this.uploadFileLink = _data["uploadFileLink"];
             this.content = _data["content"];
             this.userId = _data["userId"];
         }
     }
 
-    static fromJS(data: any): ReportForm {
+    static fromJS(data: any): ReportFormDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ReportForm();
+        let result = new ReportFormDto();
         result.init(data);
         return result;
     }
@@ -2561,19 +2589,91 @@ export class ReportForm implements IReportForm {
         data = typeof data === 'object' ? data : {};
         data["createdTime"] = this.createdTime ? this.createdTime.toISOString() : <any>undefined;
         data["updatedTime"] = this.updatedTime ? this.updatedTime.toISOString() : <any>undefined;
-        data["file"] = this.file;
+        data["uploadFileLink"] = this.uploadFileLink;
         data["content"] = this.content;
         data["userId"] = this.userId;
         return data;
     }
 }
 
-export interface IReportForm {
+export interface IReportFormDto {
     createdTime?: Date;
-    updatedTime?: Date;
-    file?: string | undefined;
+    updatedTime?: Date | undefined;
+    uploadFileLink?: string | undefined;
     content?: string | undefined;
     userId?: string;
+}
+
+export class ReportDetail implements IReportDetail {
+    id?: string;
+    createdTime?: Date;
+    updatedTime?: Date;
+    uploadFileLink?: string | undefined;
+    content?: string | undefined;
+    userId?: string;
+    user?: User;
+    comments?: Comment[] | undefined;
+
+    constructor(data?: IReportDetail) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdTime = _data["createdTime"] ? new Date(_data["createdTime"].toString()) : <any>undefined;
+            this.updatedTime = _data["updatedTime"] ? new Date(_data["updatedTime"].toString()) : <any>undefined;
+            this.uploadFileLink = _data["uploadFileLink"];
+            this.content = _data["content"];
+            this.userId = _data["userId"];
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : <any>undefined;
+            if (Array.isArray(_data["comments"])) {
+                this.comments = [] as any;
+                for (let item of _data["comments"])
+                    this.comments!.push(Comment.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ReportDetail {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReportDetail();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdTime"] = this.createdTime ? this.createdTime.toISOString() : <any>undefined;
+        data["updatedTime"] = this.updatedTime ? this.updatedTime.toISOString() : <any>undefined;
+        data["uploadFileLink"] = this.uploadFileLink;
+        data["content"] = this.content;
+        data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        if (Array.isArray(this.comments)) {
+            data["comments"] = [];
+            for (let item of this.comments)
+                data["comments"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IReportDetail {
+    id?: string;
+    createdTime?: Date;
+    updatedTime?: Date;
+    uploadFileLink?: string | undefined;
+    content?: string | undefined;
+    userId?: string;
+    user?: User;
+    comments?: Comment[] | undefined;
 }
 
 export class FormStatus implements IFormStatus {
@@ -2829,8 +2929,8 @@ export interface ITimeKeepingForm {
 }
 
 export class TimeKeepingItem implements ITimeKeepingItem {
-    checkinTime?: Date;
-    checkoutTime?: Date;
+    checkinTime?: Date | undefined;
+    checkoutTime?: Date | undefined;
     userId?: string;
 
     constructor(data?: ITimeKeepingItem) {
@@ -2867,14 +2967,14 @@ export class TimeKeepingItem implements ITimeKeepingItem {
 }
 
 export interface ITimeKeepingItem {
-    checkinTime?: Date;
-    checkoutTime?: Date;
+    checkinTime?: Date | undefined;
+    checkoutTime?: Date | undefined;
     userId?: string;
 }
 
 export class TimeKeepingDetail implements ITimeKeepingDetail {
-    checkinTime?: Date;
-    checkoutTime?: Date;
+    checkinTime?: Date | undefined;
+    checkoutTime?: Date | undefined;
     userId?: string;
 
     constructor(data?: ITimeKeepingDetail) {
@@ -2911,8 +3011,8 @@ export class TimeKeepingDetail implements ITimeKeepingDetail {
 }
 
 export interface ITimeKeepingDetail {
-    checkinTime?: Date;
-    checkoutTime?: Date;
+    checkinTime?: Date | undefined;
+    checkoutTime?: Date | undefined;
     userId?: string;
 }
 
@@ -2925,6 +3025,7 @@ export class UserItem implements IUserItem {
     username?: string | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     password?: string | undefined;
     departmentId?: string | undefined;
     department?: Department;
@@ -2949,6 +3050,7 @@ export class UserItem implements IUserItem {
             this.username = _data["username"];
             this.phone = _data["phone"];
             this.address = _data["address"];
+            this.avatarUrl = _data["avatarUrl"];
             this.password = _data["password"];
             this.departmentId = _data["departmentId"];
             this.department = _data["department"] ? Department.fromJS(_data["department"]) : <any>undefined;
@@ -2973,6 +3075,7 @@ export class UserItem implements IUserItem {
         data["username"] = this.username;
         data["phone"] = this.phone;
         data["address"] = this.address;
+        data["avatarUrl"] = this.avatarUrl;
         data["password"] = this.password;
         data["departmentId"] = this.departmentId;
         data["department"] = this.department ? this.department.toJSON() : <any>undefined;
@@ -2990,6 +3093,7 @@ export interface IUserItem {
     username?: string | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     password?: string | undefined;
     departmentId?: string | undefined;
     department?: Department;
@@ -3002,6 +3106,7 @@ export class UserFormCreate implements IUserFormCreate {
     dateOfBirth?: Date;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     email?: string | undefined;
     password?: string | undefined;
     departmentId?: string | undefined;
@@ -3023,6 +3128,7 @@ export class UserFormCreate implements IUserFormCreate {
             this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
             this.phone = _data["phone"];
             this.address = _data["address"];
+            this.avatarUrl = _data["avatarUrl"];
             this.email = _data["email"];
             this.password = _data["password"];
             this.departmentId = _data["departmentId"];
@@ -3044,6 +3150,7 @@ export class UserFormCreate implements IUserFormCreate {
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["phone"] = this.phone;
         data["address"] = this.address;
+        data["avatarUrl"] = this.avatarUrl;
         data["email"] = this.email;
         data["password"] = this.password;
         data["departmentId"] = this.departmentId;
@@ -3058,6 +3165,7 @@ export interface IUserFormCreate {
     dateOfBirth?: Date;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     email?: string | undefined;
     password?: string | undefined;
     departmentId?: string | undefined;
@@ -3070,6 +3178,7 @@ export class UserFormUpdate implements IUserFormUpdate {
     dateOfBirth?: Date | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     email?: string | undefined;
     departmentId?: string | undefined;
     role?: Role;
@@ -3090,6 +3199,7 @@ export class UserFormUpdate implements IUserFormUpdate {
             this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
             this.phone = _data["phone"];
             this.address = _data["address"];
+            this.avatarUrl = _data["avatarUrl"];
             this.email = _data["email"];
             this.departmentId = _data["departmentId"];
             this.role = _data["role"];
@@ -3110,6 +3220,7 @@ export class UserFormUpdate implements IUserFormUpdate {
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["phone"] = this.phone;
         data["address"] = this.address;
+        data["avatarUrl"] = this.avatarUrl;
         data["email"] = this.email;
         data["departmentId"] = this.departmentId;
         data["role"] = this.role;
@@ -3123,6 +3234,7 @@ export interface IUserFormUpdate {
     dateOfBirth?: Date | undefined;
     phone?: string | undefined;
     address?: string | undefined;
+    avatarUrl?: string | undefined;
     email?: string | undefined;
     departmentId?: string | undefined;
     role?: Role;

@@ -5,13 +5,11 @@ import CheckInOutLogic from './checkin-out-logic';
 import { ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import { useState } from 'react';
+import ListCheckin from './list-checkin-out';
 
 function CheckInOutComponent() {
     var { datetimeLocalInput, checkIn, checkOut, checkTime } = CheckInOutLogic();
     let clientService = new Client();
-    const handleChange = (e) => {
-        console.log(e.target.value)
-    }
 
     const [isCheckedIn, setIsCheckedIn] = useState(false);
 
@@ -99,36 +97,48 @@ function CheckInOutComponent() {
 
     }, [result.userId]);
     return (
-        <div>
-            <h1>Today</h1>
-            <div>
-                <ToastContainer />
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Checkin</Form.Label>
-                        <Form.Control type="datetime-local" onChange={handleChange}
-                            defaultValue={checkinTime}
-                            readOnly={true} />
-                        <Form.Text className="text-muted">
-                            Checkin time
-                        </Form.Text>
-                    </Form.Group>
+        <div className='mt-4'>
+            <h3>Today</h3>
+            <ToastContainer />
+            <Form>
+                <Form.Group className="mb-3">
+                    <Form.Label>Checkin</Form.Label>
+                    <Form.Control type="datetime-local"
+                        defaultValue={checkinTime}
+                        readOnly={true} />
+                    <Form.Text className="text-muted">
+                        Checkin time
+                    </Form.Text>
+                </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Checkout</Form.Label>
-                        <Form.Control type="datetime-local" onChange={handleChange}
-                            defaultValue={checkoutTime}
-                            readOnly={true} />
-                        <Form.Text className="text-muted">
-                            Checkout time
-                        </Form.Text>
-                    </Form.Group>
-                </Form>
-                <Button variant="primary" type="submit" onClick={handleSubmit}>
-                    Submit
-                </Button>
+                <Form.Group className="mb-3">
+                    <Form.Label>Checkout</Form.Label>
+                    <Form.Control type="datetime-local"
+                        defaultValue={checkoutTime}
+                        readOnly={true} />
+                    <Form.Text className="text-muted">
+                        Checkout time
+                    </Form.Text>
+                </Form.Group>
+            </Form>
+            <Button variant="primary" type="submit" onClick={handleSubmit}>
+                Submit
+            </Button>
+            <p
+                className="position-abs"
+                style={{
+                    color: "rgba(0, 0, 0, 0.5)",
+                    width: "0px",
+                    height: "90%",
+                    left: "15%",
+                    border: "1px solid #8d8989",
+                    marginLeft: "35%",
+                    top: "5%",
+                }}
+            ></p>
+            <div className='position-abs list-checkin'>
+                <ListCheckin userId={currentUser.userId} />
             </div>
-
         </div>
     )
 }

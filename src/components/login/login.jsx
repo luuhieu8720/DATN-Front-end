@@ -28,7 +28,6 @@ function Login() {
 
     return (
         <div>
-            
             <body className="align" style={{ backgroundColor: "#1d1e1f" }}>
                 <h1 className="text-light mt--5">Login</h1>
                 <div className="grid">
