@@ -8,7 +8,7 @@ import Profile from "./components/profile/profile";
 import UpdatePassword from "./components/profile/update-password";
 import ListRequests from "./components/requests/list-requests";
 import DashBoard from "./components/home/dashboard";
-import ListReports from "./components/reports/list-reports";
+import ListReports from "./components/reports/my-list-reports";
 import UserList from "./components/user-management/user-list";
 import ReportDetailPage from "./components/reports/report-detail";
 import Example from "./pages/test";

@@ -75,7 +75,7 @@ export default function Profile() {
             console.log("heheh")
             setUserUpdateForm({
                 ...userUpdateForm,
-                [dateOfBirth]: moment(value),
+                dateOfBirth: moment(value),
             });
         }
         setUserUpdateForm({

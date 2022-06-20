@@ -27,6 +27,8 @@ export default function ReportDetailPage() {
 
     var id = useParams();
 
+    console.log(id)
+
     const handleSubmit = () => {
         console.log(report.uploadFileLink);
         updateReport(report.id, report);

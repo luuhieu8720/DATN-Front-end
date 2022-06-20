@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
-import { Client, ReportFormDto, ReportItem } from "../../generated/models";
+import { Client, ReportFormDto, ReportItem, ReportsFilter } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
 import { Button, Table } from "react-bootstrap";
 import moment from "moment";
@@ -12,7 +12,7 @@ import ReportLogic from "./report-logics";
 export default function ListReports() {
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    const [listRequests, setListRequests] = useState([new ReportItem()]);
+    const [listRequests, setListRequests] = useState([]);
     const [isReported, setIsReported] = useState(false);
 
     const [reportForm, setReportForm] = useState(new ReportFormDto({
@@ -98,6 +98,9 @@ export default function ListReports() {
     const itemsPerPage = 4;
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
+
+    const [reportFilter, setReportFilter] = useState(new ReportsFilter({userId: currentUser.userId}));
+
     // Here we use item offsets; we could also use page offsets
     // following the API or data you're working with.
     const [itemOffset, setItemOffset] = useState(0);
@@ -110,7 +113,7 @@ export default function ListReports() {
 
     useEffect(() => {
         numberedItem = 0;
-        clientService.reportsAll()
+        clientService.allPOST(reportFilter)
             .then((res) => {
                 setListRequests(res);
             })
@@ -136,7 +139,6 @@ export default function ListReports() {
 
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
         setCurrentItems(listRequests.slice(itemOffset, endOffset));
         setPageCount(Math.ceil(listRequests.length / itemsPerPage));
     }, [itemOffset, itemsPerPage, listRequests.length]);

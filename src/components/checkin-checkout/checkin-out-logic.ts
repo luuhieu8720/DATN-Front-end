@@ -21,7 +21,7 @@ export default function CheckInOutLogic() {
             .then((res) => {
                 toast.success("Successfully check-in");
                 setTimeout(() => {
-                    history("/checkin-checkout");
+                    window.location.reload();
                 }, 3000);
                 return (res);
             })
@@ -40,7 +40,7 @@ export default function CheckInOutLogic() {
             .then((res) => {
                 toast.success("Successfully check-out");
                 setTimeout(() => {
-                    history("/checkin-checkout");
+                    window.location.reload();
                 }, 3000);
             })
             .catch(function (error) {
@@ -55,6 +55,9 @@ export default function CheckInOutLogic() {
         clientService.timekeepingAll2(userId)
             .then(() => {
                 toast.success("Successfully check-out");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
             })
             .catch(function (error) {
                 if (error.response) {

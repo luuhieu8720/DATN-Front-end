@@ -11,6 +11,12 @@ export default function RequestLogic() {
 
     const [requests, setRequests] = useState([new ReportItem()]);
 
+    var checkTime = (time: number) => {
+        if (time < 10)
+            return '0' + time.toString();
+        return time;
+    }
+
     const getAllrequests = () => {
         clientService.requestAll()
             .then((res) => {
@@ -54,6 +60,7 @@ export default function RequestLogic() {
     return {
         getAllrequests,
         postReport,
-        updateReport
+        updateReport,
+        checkTime
     }
 }

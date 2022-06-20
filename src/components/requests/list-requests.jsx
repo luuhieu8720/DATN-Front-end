@@ -1,26 +1,81 @@
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
-import { Client } from "../../generated/models";
+import { Client, RequestsFilter } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
+import RequestLogic from "./request-logics";
 
 export default function ListRequests() {
+    const [dateTime, setDateTime] = useState();
+    var { checkTime } = RequestLogic();
+    var userId = JSON.parse(localStorage.getItem("currentUser")).userId;
     const [listRequests, setListRequests] = useState([]);
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleSubmit = () => {
+
+    }
+
+    const handleChangeCreate = (evt) => {
+
+    }
+
+    const handleChangeFilter = (evt) => {
+        var value = evt.target.value;
+
+        setFilterRequest({ ...filterRequest, dateTime: moment(value) });
+
+        setDateTime(moment(filterRequest.dateTime).format("YYYY-MM-DD"));
+    }
+
+    const handleFilter = (evt) => {
+        clientService.user(filterRequest)
+            .then((res) => {
+                setListRequests(res);
+                console.log(listRequests)
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+    }
+
+    const [filterRequest, setFilterRequest] = useState(new RequestsFilter({
+        userId: userId,
+        dateTime: new Date(),
+    }));
+
     var numberedItem = 0;
     const Items = ({ currentItems }) => {
         return (
             <div>
                 <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
                     <h3 className="text-center">My request list</h3>
+                    <Form className="row ms-3">
+                        <Form.Group className="mb-3 col-3">
+                            <Form.Label>Filter by date</Form.Label>
+                            <Form.Control value={dateTime} type="date" name="dateTime"
+                                onChange={handleChangeFilter} />
+
+                        </Form.Group>
+                        <Button className="col-1" style={{ height: "35px", marginTop: "34px" }}
+                            onClick={handleFilter} >Filter</Button>
+                    </Form>
                     <Table striped bordered hover className="mt-4" >
                         <thead >
                             <tr>
                                 <th style={{ width: "50px" }}>#</th>
                                 <th style={{ width: "300px" }}>Content</th>
                                 <th style={{ width: "300px" }}>Reason</th>
-                                <th style={{ width: "200px" }}>Submitted time</th>
-                                <th style={{ width: "200px" }}>Updated time</th>
+                                <th style={{ width: "150px" }}>Submitted time</th>
+                                <th style={{ width: "150px" }}>Updated time</th>
+                                <th style={{ width: "150px" }}>Request date</th>
                                 <th style={{ width: "100px" }}>Status</th>
                             </tr>
                         </thead>
@@ -34,6 +89,7 @@ export default function ListRequests() {
                                         <td>{item.reason}</td>
                                         <td>{moment(item.submittedTime).format('DD-MM-YYYY')}</td>
                                         <td>{moment(item.updatedTime).format('DD-MM-YYYY')}</td>
+                                        <td>{moment(item.requestDate).format('DD-MM-YYYY')}</td>
                                         <td>{item.formStatus.status}</td>
                                     </tr>
                                 </tbody>
@@ -56,7 +112,7 @@ export default function ListRequests() {
 
     useEffect(() => {
         numberedItem = 0;
-        clientService.requestAll()
+        clientService.user(filterRequest)
             .then((res) => {
                 setListRequests(res);
                 console.log(listRequests)
@@ -81,6 +137,7 @@ export default function ListRequests() {
         );
         setItemOffset(newOffset);
     };
+
 
     return (
         <div>
@@ -109,7 +166,29 @@ export default function ListRequests() {
                     activeClassName={'active'}
                 />
             </div>
-            <Button>Send request</Button>
+            <Button onClick={handleShow}>Send request</Button>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create request</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="form-group">
+                            <Form.Label><h5>Content</h5></Form.Label>
+                            <Form.Control as="textarea" className="form-control" onChange={handleChangeCreate}
+                                name="content" rows={5} />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleSubmit}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

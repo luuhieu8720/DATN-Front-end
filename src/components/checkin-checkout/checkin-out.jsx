@@ -13,6 +13,8 @@ function CheckInOutComponent() {
 
     const [isCheckedIn, setIsCheckedIn] = useState(false);
 
+    const [isCheckedOut, setIsCheckedOut] = useState(false);
+
     const [checkinTime, setCheckinTime] = useState("");
 
     const [checkoutTime, setCheckoutTime] = useState("");
@@ -90,6 +92,7 @@ function CheckInOutComponent() {
                 checkTime(dateGetFromResult.getSeconds());
 
             setCheckoutTime(date + 'T' + time);
+            setIsCheckedOut(true);
         }
         else {
             setCheckoutTime(datetimeLocalInput);
@@ -121,8 +124,8 @@ function CheckInOutComponent() {
                     </Form.Text>
                 </Form.Group>
             </Form>
-            <Button variant="primary" type="submit" onClick={handleSubmit}>
-                Submit
+            <Button variant="primary" type="submit" onClick={handleSubmit} disabled={isCheckedOut}>
+                {!isCheckedOut ? "Submit" : "You have submitted your timesheet today"}
             </Button>
             <p
                 className="position-abs"
