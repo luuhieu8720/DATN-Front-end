@@ -26,13 +26,15 @@ export default function UserReports() {
 
     const [selectedValue, setSelectedValue] = useState()
 
-    const [reportFilter, setReportFilter] = useState(new ReportsFilter({}));
+    const [reportFilter, setReportFilter] = useState(new ReportsFilter({
+        dateTime: new Date(),
+    }));
 
     const handleChange = (evt) => {
         var value = evt.target.value;
 
         if (evt.target.name == "dateTime") {
-            setReportFilter({ ...reportFilter, dateTime: moment(value) })
+            setReportFilter({ ...reportFilter, dateTime: moment(value.toLocaleString()).format("YYYY-MM-DD") })
         }
         else {
             setReportFilter({ ...reportFilter, [evt.target.name]: value })
@@ -55,8 +57,8 @@ export default function UserReports() {
                         </Form.Group>
                         <Form.Group className="mb-3 col-3 ms-3">
                             <Form.Label className="ms-1">By department</Form.Label>
-                            <Form.Select aria-label="Default select example" 
-                               onChange={handleChange} name="departmentId"  value={selectedValue}>
+                            <Form.Select aria-label="Default select example"
+                                onChange={handleChange} name="departmentId" value={selectedValue}>
                                 {
                                     departments.map((option, index) => {
                                         return (<option key={option.name} value={option.id}>{option.name}</option>)
@@ -66,7 +68,7 @@ export default function UserReports() {
                         </Form.Group>
                         <Form.Group className="mb-3 col-3 ms-3">
                             <Form.Label className="ms-3"></Form.Label>
-                            <Button className="" style={{ height: "38px", width: "50%", marginTop:"30px" }}
+                            <Button className="" style={{ height: "38px", width: "50%", marginTop: "30px" }}
                                 onClick={handleFilter} >Filter</Button>
                         </Form.Group>
                     </Form>
@@ -74,6 +76,7 @@ export default function UserReports() {
                         <thead >
                             <tr>
                                 <th style={{ width: "50px" }}>#</th>
+                                <th style={{ width: "150px" }}>User</th>
                                 <th style={{ width: "150px" }}>Date</th>
                                 <th style={{ width: "150px" }}>Created time</th>
                                 <th style={{ width: "150px" }}>Updated time</th>
@@ -86,9 +89,10 @@ export default function UserReports() {
                                 <tbody>
                                     <tr>
                                         <td>{index + 1}</td>
+                                        <td>{`${item.user.firstName} ${item.user.lastName}`}</td>
                                         <td>{moment(item.createdTime).format('DD-MM-YYYY')}</td>
                                         <td>{moment(item.createdTime).format('hh:mm:ss A')}</td>
-                                        <td>{moment(item.updatedTime).format('DD-MM-YYYY hh:mm:ss A')}</td>
+                                        <td>{item.updatedTime ? moment(item.updatedTime).format('DD-MM-YYYY hh:mm:ss A') : ""}</td>
                                         <td style={{ textAlign: "center" }}><Button className="btn-primary" >
                                             <Link to={`/reports/detail/${item.id}`}
                                                 params={{ id: item.id }} style={{ textDecoration: "none", color: "white" }}>View</Link>

@@ -1865,9 +1865,10 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
                 "Content-Type": "application/json-patch+json",
-                "Accept": "text/plain"
+                "Accept": "text/plain",
+                "Authorization": "Bearer" + " " + currentUser.token
             }
         };
 

@@ -55,9 +55,11 @@ function SideBar() {
                                 <li hidden={role != "Admin"}><Link to="/users/manage/admin" className="link-dark rounded">Users</Link></li>
                                 <li hidden={role != "Manager"}><Link to="/users/manage/manager" className="link-dark rounded">Users</Link></li>
                                 <li hidden={role != "Admin"}><Link to="/reports/manage/admin" className="link-dark rounded">Reports</Link></li>
-                                <li hideen={role != "Manager"}><Link to="/reports/manage/manager" className="link-dark rounded">Reports</Link></li>
+                                <li hidden={role != "Manager"}><Link to="/reports/manage/manager" className="link-dark rounded">Reports</Link></li>
                                 <li hidden={role != "Admin"}><Link to="/requests/manage/admin" className="link-dark rounded">Requests</Link></li>
                                 <li hidden={role != "Manager"}><Link to="/requests/manage/manager" className="link-dark rounded">Requests</Link></li>
+                                <li hidden={role != "Admin"}><Link to="/workingtime-tracking/manage/admin" className="link-dark rounded">User working time</Link></li>
+                                <li hidden={role != "Manager"}><Link to="/workingtime-tracking/manage/manager" className="link-dark rounded">User working time</Link></li>
                             </ul>
                         </div>
                     </li>

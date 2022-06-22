@@ -1,50 +1,46 @@
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
-import { Client, ReportsFilter } from "../../generated/models";
+import { Client, ReportsFilter, WorkingTimeFilter } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
 import { Form } from "react-bootstrap";
 import { Button, Table } from "react-bootstrap";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
-export default function UserReportsManager() {
-    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    const [listReports, setlistReports] = useState([]);
+export default function UsersWorkingTime() {
+    const [workingTimeList, setWorkingTimeList] = useState([]);
 
     const handleFilter = () => {
-        console.log(reportFilter)
-        clientService.allPOST(reportFilter)
+        clientService.filter3(workingTimeFilter)
             .then((res) => {
-                setlistReports(res);
-        console.log(res)
+                setWorkingTimeList(res);
             })
             .catch(function (error) {
                 if (error.response) {
                     toast.error(error.response);
                 }
             });
-
     }
 
     const [departments, setDepartments] = useState([])
 
     const [selectedValue, setSelectedValue] = useState()
 
-    const [reportFilter, setReportFilter] = useState(new ReportsFilter({
+    const [workingTimeFilter, setWorkingTimeFilter] = useState(new WorkingTimeFilter({
         dateTime: new Date(),
-        departmentId:"00000000-0000-0000-0000-000000000000"
     }));
 
     const handleChange = (evt) => {
         var value = evt.target.value;
 
         if (evt.target.name == "dateTime") {
-            setReportFilter({ ...reportFilter, dateTime: moment(value.toLocaleString()) })
+            setWorkingTimeFilter({ ...workingTimeFilter, dateTime: moment(value.toLocaleString()).format("YYYY-MM-DD") })
         }
         else {
-            setReportFilter({ ...reportFilter, [evt.target.name]: value })
+            setWorkingTimeFilter({ ...workingTimeFilter, [evt.target.name]: value })
             setSelectedValue(value);
         }
+        console.log(workingTimeFilter)
     }
 
     const Items = ({ currentItems }) => {
@@ -57,11 +53,22 @@ export default function UserReportsManager() {
                         <Form.Group className="mb-3 col-3 ms-3">
                             <Form.Label className="ms-1">By month</Form.Label>
                             <Form.Control type="date" name="dateTime"
-                                onChange={handleChange} value={moment(reportFilter.dateTime).format("YYYY-MM-DD")} />
+                                onChange={handleChange} value={moment(workingTimeFilter.dateTime).format("YYYY-MM-DD")} />
+                        </Form.Group>
+                        <Form.Group className="mb-3 col-3 ms-3">
+                            <Form.Label className="ms-1">By department</Form.Label>
+                            <Form.Select aria-label="Default select example"
+                                onChange={handleChange} name="departmentId" value={selectedValue}>
+                                {
+                                    departments.map((option, index) => {
+                                        return (<option key={option.name} value={option.id}>{option.name}</option>)
+                                    })
+                                }
+                            </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-3 col-3 ms-3">
                             <Form.Label className="ms-3"></Form.Label>
-                            <Button className="" style={{ height: "38px", width: "50%", marginTop:"32px" }}
+                            <Button className="" style={{ height: "38px", width: "50%", marginTop: "30px" }}
                                 onClick={handleFilter} >Filter</Button>
                         </Form.Group>
                     </Form>
@@ -69,10 +76,11 @@ export default function UserReportsManager() {
                         <thead >
                             <tr>
                                 <th style={{ width: "50px" }}>#</th>
-                                <th style={{ width: "150px" }}>Date</th>
-                                <th style={{ width: "150px" }}>Created time</th>
-                                <th style={{ width: "150px" }}>Updated time</th>
-                                <th style={{ width: "150px" }} className="text-center">View</th>
+                                <th style={{ width: "150px" }}>User</th>
+                                <th style={{ width: "150px" }}>Month</th>
+                                <th style={{ width: "150px" }}>Working time</th>
+                                <th style={{ width: "150px" }}>Punished time(s)</th>
+                                <th style={{ width: "150px" }} className="text-center">View detail timesheet</th>
                             </tr>
                         </thead>
                         {
@@ -81,12 +89,13 @@ export default function UserReportsManager() {
                                 <tbody>
                                     <tr>
                                         <td>{index + 1}</td>
-                                        <td>{moment(item.createdTime).format('DD-MM-YYYY')}</td>
-                                        <td>{moment(item.createdTime).format('hh:mm:ss A')}</td>
-                                        <td>{moment(item.updatedTime).format('DD-MM-YYYY hh:mm:ss A')}</td>
+                                        <td>{`${item.user.firstName} ${item.user.lastName}`}</td>
+                                        <td>{moment(workingTimeFilter.dateTime).format('YYYY-MM')}</td>
+                                        <td>{item.time.toFixed(2)}</td>
+                                        <td>{item.punishedTime}</td>
                                         <td style={{ textAlign: "center" }}><Button className="btn-primary" >
-                                            <Link to={`/reports/detail/${item.id}`}
-                                                params={{ id: item.id }} style={{ textDecoration: "none", color: "white" }}>View</Link>
+                                            <Link to={`/workingtime-tracking/manage/${item.userId}/${workingTimeFilter.dateTime ? moment(workingTimeFilter.dateTime.toLocaleString()).format("YYYY-MM-DD") : ""}`}
+                                                params={{ id: item.userId }} style={{ textDecoration: "none", color: "white" }}>View</Link>
                                         </Button></td>
                                     </tr>
                                 </tbody>
@@ -109,21 +118,9 @@ export default function UserReportsManager() {
     const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
-        clientService.usersGET(currentUser.userId)
+        clientService.filter3(workingTimeFilter)
             .then((res) => {
-                setReportFilter(new ReportsFilter({ ...reportFilter,
-                    departmentId: res.departmentId
-                }))
-            })
-            .catch(function (error) {
-                if (error.response) {
-                    toast.error(error.response);
-                }
-            });
-
-        clientService.allPOST(reportFilter)
-            .then((res) => {
-                setlistReports(res);
+                setWorkingTimeList(res);
             })
             .catch(function (error) {
                 if (error.response) {
@@ -143,13 +140,13 @@ export default function UserReportsManager() {
 
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        setCurrentItems(listReports.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(listReports.length / itemsPerPage));
-    }, [itemOffset, itemsPerPage, listReports.length, departments.length, reportFilter.departmentId]);
+        setCurrentItems(workingTimeList.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(workingTimeList.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, workingTimeList.length, departments.length, workingTimeFilter.departmentId]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % listReports.length;
+        const newOffset = (event.selected * itemsPerPage) % workingTimeList.length;
         console.log(
             `User requested page number ${event.selected}, which is offset ${newOffset}`
         );
@@ -157,7 +154,7 @@ export default function UserReportsManager() {
     };
 
     console.log(departments)
-    if (!departments || !listReports) return (<p>Loading</p>)
+    if (!departments || !workingTimeList) return (<p>Loading</p>)
 
     return (
         <div>

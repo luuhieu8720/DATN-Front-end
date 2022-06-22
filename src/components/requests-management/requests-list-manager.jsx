@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
-import { Client, FormRequestConfirm, FormRequestForm, RequestsFilter } from "../../generated/models";
+import { Client, FormRequestConfirm, FormRequestDetail, FormRequestForm, RequestsFilter } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
@@ -8,8 +8,9 @@ import RequestLogic from "../requests/request-logics";
 
 export default function RequestsListManager() {
     const [dateTime, setDateTime] = useState();
+    const [currentItem, setCurrentItem] = useState(new FormRequestDetail());
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    var { updateRequest, confirm } = RequestLogic();
+    var { confirm } = RequestLogic();
     const [listRequests, setListRequests] = useState([]);
 
     const [confirmRequestId, setConfirmRequestId] = useState();
@@ -61,11 +62,11 @@ export default function RequestsListManager() {
         return (
             <div>
                 <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
-                    <h3 className="text-center">My request list</h3>
+                    <h3 className="text-center">User requestS list</h3>
                     <Form className="row ms-3">
                         <Form.Group className="mb-3 col-3">
                             <Form.Label>Filter by month</Form.Label>
-                            <Form.Control value={dateTime} type="date" name="dateTime"
+                            <Form.Control value={moment(filterRequest.dateTime).format("YYYY-MM-DD")} type="date" name="dateTime"
                                 onChange={handleChangeFilter} />
 
                         </Form.Group>
@@ -87,7 +88,6 @@ export default function RequestsListManager() {
                         {
                             currentItems &&
                             currentItems.map((item, index) => {
-                                setConfirmRequestId(item.id);
                                 return (
                                     <tbody>
                                         <tr>
@@ -98,7 +98,12 @@ export default function RequestsListManager() {
                                             <td>{moment(item.requestDate).format('DD-MM-YYYY')}</td>
                                             <td>{item.formStatus.status}</td>
                                             <td style={{ textAlign: "center" }}>
-                                                <Button className="btn-primary" onClick={handleShow} >
+                                                <Button className="btn-primary"
+                                                    onClick={() => {
+                                                        setShow(true);
+                                                        setConfirmRequestId(item.id);
+                                                        setCurrentItem(item)
+                                                    }} >
                                                     View
                                                 </Button>
                                             </td>
@@ -112,46 +117,49 @@ export default function RequestsListManager() {
                                                     <Form.Group className="form-group mb-1">
                                                         <Form.Label><h5>Content</h5></Form.Label>
                                                         <Form.Control as="textarea" className="form-control" disabled={true}
-                                                            name="content" rows={2} value={item.content} />
+                                                            name="content" rows={2} value={currentItem.content} />
                                                     </Form.Group>
                                                     <Form.Group className="form-group mb-2">
                                                         <Form.Label><h5>Reason</h5></Form.Label>
                                                         <Form.Control as="textarea" className="form-control" disabled={true}
-                                                            name="reason" rows={2} value={item.reason} />
+                                                            name="reason" rows={2} value={currentItem.reason} />
                                                     </Form.Group>
                                                     <Form.Group className="form-group row mb-2">
                                                         <div className="col-6">
                                                             <Form.Label><h5>Request type</h5></Form.Label>
                                                             <Form.Control type="text" className="form-control" disabled={true}
-                                                                name="status" value={item.requestType.typeName} />
+                                                                name="status" value={currentItem.requestType ? currentItem.requestType.typeName : ""} />
                                                         </div>
                                                         <div className="col-6">
                                                             <Form.Label><h5>Status</h5></Form.Label>
                                                             <Form.Control type="text" className="form-control" disabled={true}
-                                                                name="status" value={item.formStatus.status} />
+                                                                name="status" value={currentItem.formStatus ? currentItem.formStatus.status : ""} />
                                                         </div>
                                                     </Form.Group>
                                                     <Form.Group className="form-group row">
                                                         <div className="col-6">
                                                             <Form.Label><h5>Requested day</h5></Form.Label>
                                                             <Form.Control type="text" className="form-control" disabled={true}
-                                                                name="status" value={moment(item.submittedTime).format('DD-MM-YYYY')} />
+                                                                name="status" value={moment(currentItem.submittedTime).format('DD-MM-YYYY')} />
                                                         </div>
                                                         <div className="col-6">
                                                             <Form.Label><h5>Date off</h5></Form.Label>
                                                             <Form.Control type="text" className="form-control" disabled={true}
-                                                                name="status" value={moment(item.requestDate).format('DD-MM-YYYY')} />
+                                                                name="status" value={moment(currentItem.requestDate).format('DD-MM-YYYY')} />
                                                         </div>
                                                     </Form.Group>
+                                                    <p hidden={currentItem.formStatus ? (currentItem.formStatus.status == "Pending") : false}>This request has been {currentItem.formStatus ? (currentItem.formStatus.status) : ""}</p>
                                                 </Form>
                                             </Modal.Body>
+
                                             <Modal.Footer>
-                                                <Button variant="secondary" onClick={handleReject}>
+                                                <Button variant="secondary" hidden={currentItem.formStatus ? (currentItem.formStatus.status != "Pending") : false} onClick={handleReject}>
                                                     Reject
                                                 </Button>
-                                                <Button variant="primary" onClick={handleApprove}>
+                                                <Button variant="primary" hidden={currentItem.formStatus ? currentItem.formStatus.status != "Pending" : false} onClick={handleApprove}>
                                                     Approve
                                                 </Button>
+
                                             </Modal.Footer>
                                         </Modal>
                                     </tbody>
