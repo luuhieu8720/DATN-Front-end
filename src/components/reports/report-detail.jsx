@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
-import { ReportDetail } from "../../generated/models";
+import { CommentForm, ReportDetail, ReportFormDto } from "../../generated/models";
 import { Client } from "../../generated/models";
 import { toast, ToastContainer } from "react-toastify";
 import { Button } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import ReportLogic from "./report-logics";
+import { Modal } from "react-bootstrap";
+import CommentLogics from "../reports-management/comment-logics";
+import CommentThumbnail from "./comment-thumbnail";
 
 export default function ReportDetailPage() {
+    const { comment } = CommentLogics();
 
     function getBase64(file) {
         return new Promise((resolve, reject) => {
@@ -25,22 +29,36 @@ export default function ReportDetailPage() {
 
     const [report, setReport] = useState(new ReportDetail());
 
+    const [reportForm, setReportForm] = useState(new ReportFormDto());
+
     var id = useParams();
 
-    console.log(id)
-
     const handleSubmit = () => {
-        console.log(report.uploadFileLink);
-        updateReport(report.id, report);
+        console.log(report)
+        updateReport(report.id, reportForm);
     }
 
     const handleChange = (evt) => {
         const value = evt.target.value;
 
-        setReport({
-            ...report,
+        setReportForm({
+            ...reportForm,
             [evt.target.name]: value,
         });
+    }
+
+    const handleSubmitComment = () => {
+        if (commentForm.content == "" || commentForm.content == null) {
+            toast.warning("Comment cannot be null or empty");
+        }
+        else {
+            var today = new Date();
+
+            setCommentForm({ ...commentForm, commentedTime: moment(today) })
+            console.log(commentForm);
+
+            comment(commentForm);
+        }
     }
 
     const handleChangeImage = (evt) => {
@@ -56,6 +74,16 @@ export default function ReportDetailPage() {
         }
     }
 
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [commentForm, setCommentForm] = useState(new CommentForm({
+        reportId: id.id,
+        userId: currentUser.userId
+    }))
+
     useEffect(() => {
         console.log(report.uploadFileLink)
     }, [report.uploadFileLink])
@@ -63,7 +91,9 @@ export default function ReportDetailPage() {
     useEffect(() => {
         clientService.reportsGET(id.id)
             .then((res) => {
+                console.log(res)
                 setReport(res);
+                setReportForm(res);
             })
             .catch((error) => {
                 if (error.response) {
@@ -73,7 +103,13 @@ export default function ReportDetailPage() {
         return report;
     }, [])
 
-    if (!report || !report.user) return (<p>Loading</p>)
+    const listComment = report.comments ? report.comments.map((comment) => (
+        <div className="mt-2">
+            <CommentThumbnail comment={comment} />
+        </div>
+    )) : (<></>);
+
+    if (!report || !report.user || !report.comments) return (<p>Loading</p>)
     return (
         <div>
             <ToastContainer />
@@ -96,7 +132,7 @@ export default function ReportDetailPage() {
                                         Reported date: {moment(report.createdTime).format('DD-MM-YYYY')}</p>
                                     <p className="text-muted mb-2">
                                         Reported time: {moment(report.createdTime.toLocaleString()).format('hh:mm:ss A')}</p>
-                                    <p className="text-muted mb-2">Updated time: {moment(report.createdTime.toLocaleString()).format('DD-MM-YYYY hh:mm:ss A')}</p>
+                                    <p className="text-muted mb-2">Updated time: {report.updatedTime ? moment(report.updatedTime.toLocaleString()).format('DD-MM-YYYY hh:mm:ss A') : ""}</p>
                                     <Form>
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                             <Form.Label className="fw-bold">Report Content</Form.Label>
@@ -104,11 +140,11 @@ export default function ReportDetailPage() {
                                                 defaultValue={report.content} onChange={handleChange} name="content" rows={8} />
                                         </Form.Group>
                                         <Button variant="primary" className="mb-3" style={{ margin: "auto", display: "block" }}
-                                            hidden={!currentUser.userId == report.user.id} onClick={handleSubmit}>
+                                            hidden={currentUser.userId != report.user.id || currentUser.role != "Employee"} onClick={handleSubmit}>
                                             Edit
                                         </Button>
                                         <Button variant="primary mb-3" style={{ margin: "auto", display: "block" }}
-                                            hidden={currentUser.role == "Employee"} >
+                                            hidden={currentUser.role == "Employee"} onClick={handleShow} >
                                             Comment
                                         </Button>
                                     </Form>
@@ -119,28 +155,42 @@ export default function ReportDetailPage() {
                                             <img src={report.uploadFileLink ? report.uploadFileLink : "/images/avatardefault.png"}
                                                 className="img-fluid" style={{ margin: "auto", display: "block", width: "400px", borderRadius: "10px" }}
                                             />
-                                            <Form.Control style={{ width: "40%", margin: "5px auto" }} type="file"
+                                            <Form.Control style={{ width: "40%", margin: "5px auto" }} type="file" hidden={currentUser.userId != report.user.id || currentUser.role != "Employee"}
                                                 className="text-center center-block file-upload mt-2" name="uploadFileLink"
                                                 onChange={handleChangeImage} />
                                         </Form.Group>
                                     </Form>
-                                    {/* <h4 className="mb-2">{report.user.firstName + " " + report.user.lastName}</h4>
-                                <p className="text-muted mb-4">
-                                    Department:
-                                    {report.user.department ? report.user.department.name : " "}</p>
-                                <p className="text-muted mb-4">
-                                    Reported date: {moment(report.createdTime).format('DD-MM-YYYY')}</p>
-                                <p className="text-muted mb-4">
-                                    Reported time: {moment(report.createdTime.toLocaleString()).format('hh:mm:ss A')}</p>
-                                <Button hidden={(currentUser.role != "Manager")} className="btn btn-primary btn-rounded btn-lg">
-                                    Comment
-                                </Button> */}
                                 </div>
                             </div>
                         </div>
-
+                        {listComment}
                     </div>
                 </div>
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Create request</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="form-group">
+                                <Form.Label><h5>Content</h5></Form.Label>
+                                <Form.Control as="textarea" className="form-control"
+                                    rows={4} onChange={(evt) => {
+                                        setCommentForm({ ...commentForm, content: evt.target.value });
+                                        console.log(commentForm)
+                                    }} />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={handleSubmitComment}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </section>
         </div>
     )

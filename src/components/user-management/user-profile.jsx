@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { UserDetail, UserFormUpdate } from "../../generated/models";
-import ProfileLogic from "./profile-logics";
 import { ToastContainer, toast } from "react-toastify";
 import { Client } from "../../generated/models";
 import moment from "moment";
+import { useNavigate, useParams } from "react-router";
+import ProfileLogic from "../profile/profile-logics";
+import { Link } from "react-router-dom";
 
-export default function Profile() {
-    let clientService = new Client();
+export default function UserProfile() {
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    var history = useNavigate();
+
+    var id = useParams();
+    let clientService = new Client();
     const [test, setTest] = useState(new UserDetail());
-    var { user, getUser, updateUser } = ProfileLogic(currentUser.userId);
+    var { user, getUser, updateUser } = ProfileLogic(id.id);
 
     const [dateOfBirth, setDateOfBirth] = useState();
 
@@ -64,8 +70,18 @@ export default function Profile() {
     }
 
     useEffect(() => {
+        if (currentUser) {
+            if (currentUser.role != "Admin" && currentUser.role != "Manager") {
+                alert("You don't have permission to this page");
+
+                setTimeout(() => {
+                    history("/");
+                }, 1000);
+            }
+        }
+
         var t = getUser();
-        clientService.usersGET(currentUser.userId)
+        clientService.usersGET(id.id)
             .then((res) => {
                 setUserUpdateForm(new UserDetail({
                     id: res.id,
@@ -108,8 +124,15 @@ export default function Profile() {
 
     const handleSubmit = () => {
         console.log(userUpdateForm.dateOfBirth)
-        updateUser(currentUser.userId, userUpdateForm);
+        updateUser(id.id, userUpdateForm);
     }
+
+    if (!user) return (<p>Loading</p>)
+
+    if (!currentUser) return (<div>
+        <p>You need to login</p>
+        <Link to="/login">Login</Link>
+    </div>)
 
     return (
         <div className="container bootstrap snippet">
@@ -117,7 +140,7 @@ export default function Profile() {
             <div className="row">
                 <div className="col-sm-4">
                     <div className="text-center">
-                        <div className="col-sm-10 mt-4 ms-3"><h5>{currentUser.username}</h5></div>
+                        <div className="col-sm-10 mt-4 ms-3"><h5>{user.username}</h5></div>
                         <img src={userUpdateForm.avatarUrl ? userUpdateForm.avatarUrl : "http://ssl.gstatic.com/accounts/ui/avatar_2x.png"} className="avatar img-circle img-thumbnail" alt="avatar" />
                         <h6>Upload a different photo...</h6>
                         <Form.Control type="file"
@@ -127,12 +150,12 @@ export default function Profile() {
                 <div className="col-sm-8 mt-4">
                     <div className="tab-content">
                         <Form.Group id="registrationForm" className="form-group">
-                            <Form.Group className="col-xs-6" style={{width:"60%"}}>
+                            <Form.Group className="col-xs-6" style={{ width: "60%" }}>
                                 <Form.Label><h5>First name</h5></Form.Label>
                                 <Form.Control type="text" className="form-control" onChange={handleChange}
                                     name="firstName" id="first_name" defaultValue={user.firstName} />
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
                                 <div className="col-xs-6">
                                     <Form.Label><h5>Last name</h5></Form.Label>
                                     <Form.Control type="text" className="form-control" onChange={handleChange}
@@ -140,7 +163,7 @@ export default function Profile() {
                                 </div>
                             </Form.Group>
 
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
 
                                 <div className="col-xs-6">
                                     <Form.Label><h5>Phone</h5></Form.Label>
@@ -148,7 +171,7 @@ export default function Profile() {
                                         name="phone" id="phone" defaultValue={user.phone} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
 
                                 <div className="col-xs-6">
                                     <Form.Label><h5>Email</h5></Form.Label>
@@ -156,7 +179,7 @@ export default function Profile() {
                                         name="email" id="email" defaultValue={user.email} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
 
                                 <div className="col-xs-6">
                                     <label><h5>Location</h5></label>
@@ -164,7 +187,7 @@ export default function Profile() {
                                         name="address" defaultValue={user.address} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
                                 <div className="col-xs-6">
                                     <label><h5>Date of birth</h5></label>
                                     <Form.Control type="date" onChange={handleChange}
@@ -172,7 +195,7 @@ export default function Profile() {
                                         value={moment(userUpdateForm.dateOfBirth).format("YYYY-MM-DD")} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"50%"}}>
+                            <Form.Group className="form-group" style={{ width: "50%" }}>
                                 <div className="col-xs-12">
                                     <br />
                                     <Button onClick={handleSubmit} type="submit"><i className="glyphicon glyphicon-ok-sign"></i> Save</Button>

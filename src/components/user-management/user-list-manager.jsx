@@ -7,12 +7,13 @@ import { Table } from "react-bootstrap";
 import './css/user-list.css';
 import ReactPaginate from 'react-paginate';
 
-function UserList() {
+function UserListManager() {
     const [userList, setUserList] = useState([]);
     let clientServices = new Client();
 
     const itemsPerPage = 4;
     const [currentItems, setCurrentItems] = useState(null);
+    const [departmentId, setDepartmentId] = useState();
     const [pageCount, setPageCount] = useState(0);
     // Here we use item offsets; we could also use page offsets
     // following the API or data you're working with.
@@ -22,7 +23,6 @@ function UserList() {
     useEffect(
         () => {
             var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-            console.log(currentUser)
             if (currentUser.role != "Admin" && currentUser.role != "Manager") {
                 alert("You do not have access to this page");
                 setTimeout(() => {
@@ -30,9 +30,22 @@ function UserList() {
                 }, 1000);
             }
 
-            clientServices.usersAll()
+            clientServices.usersGET(currentUser.userId)
+            .then((res) => {
+                setDepartmentId(res.departmentId);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+
+            console.log(departmentId)
+
+            clientServices.manager(departmentId)
                 .then((res) => {
                     setUserList(res);
+                    console.log(res)
                 }).catch(function (error) {
                     if (error.response) {
                         toast.error(error.response);
@@ -43,7 +56,7 @@ function UserList() {
             setCurrentItems(userList.slice(itemOffset, endOffset));
             setPageCount(Math.ceil(userList.length / itemsPerPage));
 
-        }, [itemOffset, itemsPerPage, userList.length])
+        }, [itemOffset, itemsPerPage, userList.length, departmentId])
 
     const listUser = userList.map((user) => (
         <div class="" style={{ margin: "auto", width: "50%" }}>
@@ -77,13 +90,13 @@ function UserList() {
     return (
         <div className="">
             <ToastContainer />
-            <h3 className="text-center mt-3" style={{marginBottom:"60px"}}>User management</h3>
+            <h3 className="text-center mt-3" style={{ marginBottom: "60px" }}>User management</h3>
             <div>
                 <Items currentItems={currentItems} />
             </div>
 
-            <div style={{marginLeft:"50%"}}>
-                <ReactPaginate 
+            <div style={{ marginLeft: "50%" }}>
+                <ReactPaginate
                     breakLabel="..."
                     nextLabel=">"
                     onPageChange={handlePageClick}
@@ -106,4 +119,4 @@ function UserList() {
         </div>
     );
 }
-export default UserList;
+export default UserListManager;

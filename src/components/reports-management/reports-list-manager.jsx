@@ -1,65 +1,67 @@
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
-import { Client, ReportFormDto, ReportItem, ReportsFilter } from "../../generated/models";
+import { Client, ReportsFilter } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
+import { Form } from "react-bootstrap";
 import { Button, Table } from "react-bootstrap";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import Modal from 'react-bootstrap/Modal';
-import { Form } from "react-bootstrap";
-import ReportLogic from "./report-logics";
 
-export default function ListReports() {
+export default function UserReportsManager() {
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const [listReports, setlistReports] = useState([]);
 
-    const [listRequests, setListRequests] = useState([]);
-    const [isReported, setIsReported] = useState(false);
+    const handleFilter = () => {
+        clientService.allPOST(reportFilter)
+            .then((res) => {
+                setlistReports(res);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+    }
 
-    const [reportForm, setReportForm] = useState(new ReportFormDto({
-        userId: currentUser.userId
+    const [departments, setDepartments] = useState([])
+
+    const [selectedValue, setSelectedValue] = useState()
+
+    const [reportFilter, setReportFilter] = useState(new ReportsFilter({
+        departmentId:"00000000-0000-0000-0000-000000000000"
     }));
 
-    var { postReport } = ReportLogic();
-
-    const handleChangeImage = (evt) => {
-        const value = evt.target.files[0];
-
-        if (value != null) {
-            getBase64(value).then((res) => setReportForm({
-                ...reportForm,
-                ["uploadFileLink"]: res,
-            }));
-        }
-    }
-
-    const handleSubmit = () => {
-        postReport(reportForm);
-    }
-
-    function getBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
-
     const handleChange = (evt) => {
-        const value = evt.target.value;
+        var value = evt.target.value;
 
-        setReportForm({
-            ...reportForm,
-            [evt.target.name]: value,
-        });
+        if (evt.target.name == "dateTime") {
+            setReportFilter({ ...reportFilter, dateTime: moment(value) })
+        }
+        else {
+            setReportFilter({ ...reportFilter, [evt.target.name]: value })
+            setSelectedValue(value);
+        }
+        console.log(reportFilter)
     }
 
-    var numberedItem = 0;
     const Items = ({ currentItems }) => {
         return (
             <div>
                 <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
-                    <h3 className="text-center">My reports</h3>
+                    <h3 className="text-center">User reports</h3>
+                    <Form className="row">
+                        <Form.Label className="ms-3"><h4>Filter</h4></Form.Label>
+                        <Form.Group className="mb-3 col-3 ms-3">
+                            <Form.Label className="ms-1">By month</Form.Label>
+                            <Form.Control type="date" name="dateTime"
+                                onChange={handleChange} value={moment(reportFilter.dateTime).format("YYYY-MM-DD")} />
+                        </Form.Group>
+                        <Form.Group className="mb-3 col-3 ms-3">
+                            <Form.Label className="ms-3"></Form.Label>
+                            <Button className="" style={{ height: "38px", width: "50%", marginTop:"32px" }}
+                                onClick={handleFilter} >Filter</Button>
+                        </Form.Group>
+                    </Form>
                     <Table striped bordered hover className="mt-4" >
                         <thead >
                             <tr>
@@ -72,10 +74,10 @@ export default function ListReports() {
                         </thead>
                         {
                             currentItems &&
-                            currentItems.map((item) => (
+                            currentItems.map((item, index) => (
                                 <tbody>
                                     <tr>
-                                        <td>{numberedItem++}</td>
+                                        <td>{index + 1}</td>
                                         <td>{moment(item.createdTime).format('DD-MM-YYYY')}</td>
                                         <td>{moment(item.createdTime).format('hh:mm:ss A')}</td>
                                         <td>{moment(item.updatedTime).format('DD-MM-YYYY hh:mm:ss A')}</td>
@@ -99,23 +101,16 @@ export default function ListReports() {
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
 
-    const [reportFilter, setReportFilter] = useState(new ReportsFilter({userId: currentUser.userId}));
-
     // Here we use item offsets; we could also use page offsets
     // following the API or data you're working with.
     const [itemOffset, setItemOffset] = useState(0);
 
-    //modal react bootstrap
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
     useEffect(() => {
-        numberedItem = 0;
-        clientService.allPOST(reportFilter)
+        clientService.usersGET(currentUser.userId)
             .then((res) => {
-                setListRequests(res);
+                setReportFilter(new ReportsFilter({ ...reportFilter,
+                    departmentId: res.departmentId
+                }))
             })
             .catch(function (error) {
                 if (error.response) {
@@ -123,34 +118,43 @@ export default function ListReports() {
                 }
             });
 
-        var today = new Date();
-
-        if (listRequests) {
-            listRequests.map((request) => {
-                if (request.createdTime) {
-                    if (request.createdTime.getDate() == today.getDate()
-                        && request.createdTime.getMonth() == today.getMonth()
-                        && request.createdTime.getFullYear() == today.getFullYear()) {
-                        setIsReported(true);
-                    }
-                }
+        clientService.allPOST(reportFilter)
+            .then((res) => {
+                setlistReports(res);
             })
-        }
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+
+        clientService.departmentsAll()
+            .then((res) => {
+                setDepartments(res);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
 
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
-        setCurrentItems(listRequests.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(listRequests.length / itemsPerPage));
-    }, [itemOffset, itemsPerPage, listRequests.length]);
+        setCurrentItems(listReports.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(listReports.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage, listReports.length, departments.length, reportFilter.departmentId]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % listRequests.length;
+        const newOffset = (event.selected * itemsPerPage) % listReports.length;
         console.log(
             `User requested page number ${event.selected}, which is offset ${newOffset}`
         );
         setItemOffset(newOffset);
     };
+
+    console.log(departments)
+    if (!departments || !listReports) return (<p>Loading</p>)
 
     return (
         <div>
@@ -179,35 +183,6 @@ export default function ListReports() {
                     activeClassName={'active'}
                 />
             </div>
-            <Button disabled={isReported} onClick={handleShow}>{isReported ? "You have reported today" : "Create reports"}</Button>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Create report</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="form-group">
-                            <Form.Label><h5>Content</h5></Form.Label>
-                            <Form.Control as="textarea" className="form-control" onChange={handleChange}
-                                name="content" rows={5} />
-                        </Form.Group>
-                        <Form.Group className="mt-2 mb-2" >
-                            <Form.Label className="text-center" style={{ margin: "auto" }}>Link your evidence here</Form.Label>
-                            <Form.Control style={{ width: "40%", margin: "5px auto" }} type="file"
-                                className="text-center center-block file-upload mt-2" name="uploadFileLink"
-                                onChange={handleChangeImage} />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleSubmit}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </div>
     );
 }

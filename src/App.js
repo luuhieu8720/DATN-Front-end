@@ -12,6 +12,11 @@ import ListReports from "./components/reports/my-list-reports";
 import UserList from "./components/user-management/user-list";
 import ReportDetailPage from "./components/reports/report-detail";
 import Example from "./pages/test";
+import UserProfile from "./components/user-management/user-profile";
+import UserReports from "./components/reports-management/reports-list";
+import UserReportsManager from "./components/reports-management/reports-list-manager";
+import UserListManager from "./components/user-management/user-list-manager";
+import RequestsListManager from "./components/requests-management/requests-list-manager";
 
 function App() {
   return (
@@ -22,10 +27,15 @@ function App() {
           <Route exact path="/checkin-checkout" element={<CheckInOut />}></Route>
           <Route exact path="/profile" element={<Profile />}></Route>
           <Route exact path="/password" element={<UpdatePassword />}></Route>
-          <Route exact path="/list-requests" element={<ListRequests />}></Route>
-          <Route exact path="/list-reports" element={<ListReports />}></Route>
-          <Route exact path="/list-users" element={<UserList />}></Route>
-          <Route exact path="/report-detail/:id" element={<ReportDetailPage />}></Route>
+          <Route exact path="/requests/list" element={<ListRequests />}></Route>
+          <Route exact path="/requests/manage/manager" element={<RequestsListManager />}></Route>
+          <Route exact path="/reports/list" element={<ListReports />}></Route>
+          <Route exact path="/users/manage/admin" element={<UserList />}></Route>
+          <Route exact path="/users/manage/manager" element={<UserListManager />}></Route>
+          <Route exact path="/users/profile/:id" element={<UserProfile />}></Route>
+          <Route exact path="/reports/manage/admin" element={<UserReports />}></Route>
+          <Route exact path="/reports/manage/manager" element={<UserReportsManager />}></Route>
+          <Route exact path="/reports/detail/:id" element={<ReportDetailPage />}></Route>
           <Route exact path="/test" element={<Example />}></Route>
         </Route>
         <Route exact path="/login" element={<Login />}></Route>

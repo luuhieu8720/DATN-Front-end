@@ -10,6 +10,8 @@ export default function ListCheckin(props) {
     var userId = JSON.parse(localStorage.getItem("currentUser")).userId;
     const [listCheckin, setListCheckin] = useState([]);
 
+    const [totalPunished, setTotalPunished] = useState(0);
+
     const [filterTimeKeeping, setfilterTimeKeeping] = useState(new WorkingTimeFilter({
         dateTime: new Date(),
         userId: userId
@@ -54,9 +56,11 @@ export default function ListCheckin(props) {
             .then((res) => {
                 if (res.length != 0) {
                     setWorkingTime(res[0].time);
+                    setTotalPunished(res[0].punishedTime);
                 }
                 else {
                     setWorkingTime(0)
+                    setTotalPunished(0)
                 }
             })
             .catch(function (error) {
@@ -66,10 +70,9 @@ export default function ListCheckin(props) {
             });
     }
 
-    var numberedItem = 0;
     const Items = ({ currentItems }) => {
         return (
-            <div className="mt-4">
+            <div className="mt-4 me-2">
                 <h3 className="text-center">Working timesheets</h3>
                 <Form className="row">
                     <Form.Group className="mb-3 col-6">
@@ -84,22 +87,24 @@ export default function ListCheckin(props) {
                 <Table striped bordered hover className="mt-4" >
                     <thead >
                         <tr>
-                            <th style={{ width: "40px" }}>#</th>
+                            <th style={{ width: "30px" }}>#</th>
                             <th style={{ width: "200px" }}>Date</th>
-                            <th style={{ width: "200px" }}>Checkin time</th>
-                            <th style={{ width: "200px" }}>Checkout time</th>
+                            <th style={{ width: "150px" }}>Checkin time</th>
+                            <th style={{ width: "150px" }}>Checkout time</th>
+                            <th style={{ width: "150px" }}>Punished</th>
                         </tr>
                     </thead>
                     {
                         currentItems &&
-                        currentItems.map((item) => {
+                        currentItems.map((item, index) => {
                             return (
                                 <tbody>
                                     <tr>
-                                        <td>{numberedItem++}</td>
+                                        <td>{index + 1}</td>
                                         <td>{moment(item.checkinTime).format('DD-MM-YYYY')}</td>
                                         <td>{moment(item.checkinTime).format('hh:mm:ss A')}</td>
                                         <td>{item.checkoutTime ? moment(item.checkoutTime).format('hh:mm:ss A') : ""}</td>
+                                        <td>{item.punishedTime}</td>
                                     </tr>
                                 </tbody>
                             )
@@ -119,7 +124,6 @@ export default function ListCheckin(props) {
     const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
-        numberedItem = 0;
         clientService.filter2(filterTimeKeeping)
             .then((res) => {
                 setListCheckin(res);
@@ -135,9 +139,11 @@ export default function ListCheckin(props) {
             .then((res) => {
                 if (res) {
                     setWorkingTime(res[0].time);
+                    setTotalPunished(res[0].punishedTime)
                 }
                 else {
                     setWorkingTime(0)
+                    setTotalPunished(0)
                 }
             })
             .catch(function (error) {
@@ -186,6 +192,7 @@ export default function ListCheckin(props) {
             </div>
 
             <p className="">Total working time this month: {workingTime.toFixed(2)} hours</p>
+            <p className="">Total punished times this month: {totalPunished} time(s)</p>
         </div>
     );
 }

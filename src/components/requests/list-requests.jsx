@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
-import { Client, RequestsFilter } from "../../generated/models";
+import { Client, FormRequestForm, RequestsFilter } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
@@ -8,9 +8,15 @@ import RequestLogic from "./request-logics";
 
 export default function ListRequests() {
     const [dateTime, setDateTime] = useState();
-    var { checkTime } = RequestLogic();
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    var { checkTime, postRequest } = RequestLogic();
     var userId = JSON.parse(localStorage.getItem("currentUser")).userId;
     const [listRequests, setListRequests] = useState([]);
+
+    const [createForm, setCreateForm] = useState(new FormRequestForm({
+        statusId: 1,
+        userId: currentUser.userId
+    }));
 
     const [show, setShow] = useState(false);
 
@@ -18,11 +24,29 @@ export default function ListRequests() {
     const handleShow = () => setShow(true);
 
     const handleSubmit = () => {
-
+        postRequest(createForm);
     }
 
     const handleChangeCreate = (evt) => {
+        var value = evt.target.value;
 
+        if (evt.target.name == "requestDate") {
+            setCreateForm({ ...createForm, requestDate: moment(value) })
+        }
+
+        else if (evt.target.name == "requestTypeId") {
+            setCreateForm({
+                ...createForm,
+                [evt.target.name]: Number.parseInt(value),
+            });
+        }
+
+        else {
+            setCreateForm({
+                ...createForm,
+                [evt.target.name]: value,
+            });
+        }
     }
 
     const handleChangeFilter = (evt) => {
@@ -38,6 +62,7 @@ export default function ListRequests() {
             .then((res) => {
                 setListRequests(res);
                 console.log(listRequests)
+                
             })
             .catch(function (error) {
                 if (error.response) {
@@ -59,7 +84,7 @@ export default function ListRequests() {
                     <h3 className="text-center">My request list</h3>
                     <Form className="row ms-3">
                         <Form.Group className="mb-3 col-3">
-                            <Form.Label>Filter by date</Form.Label>
+                            <Form.Label>Filter by month</Form.Label>
                             <Form.Control value={dateTime} type="date" name="dateTime"
                                 onChange={handleChangeFilter} />
 
@@ -71,24 +96,24 @@ export default function ListRequests() {
                         <thead >
                             <tr>
                                 <th style={{ width: "50px" }}>#</th>
-                                <th style={{ width: "300px" }}>Content</th>
-                                <th style={{ width: "300px" }}>Reason</th>
+                                <th style={{ width: "250px" }}>Content</th>
+                                <th style={{ width: "250px" }}>Reason</th>
                                 <th style={{ width: "150px" }}>Submitted time</th>
-                                <th style={{ width: "150px" }}>Updated time</th>
+                                <th style={{ width: "150px" }}>Request type</th>
                                 <th style={{ width: "150px" }}>Request date</th>
                                 <th style={{ width: "100px" }}>Status</th>
                             </tr>
                         </thead>
                         {
                             currentItems &&
-                            currentItems.map((item) => (
+                            currentItems.map((item, index) => (
                                 <tbody>
                                     <tr>
-                                        <td>{numberedItem++}</td>
+                                        <td>{index + 1}</td>
                                         <td>{item.content}</td>
                                         <td>{item.reason}</td>
                                         <td>{moment(item.submittedTime).format('DD-MM-YYYY')}</td>
-                                        <td>{moment(item.updatedTime).format('DD-MM-YYYY')}</td>
+                                        <td>{item.requestType.typeName}</td>
                                         <td>{moment(item.requestDate).format('DD-MM-YYYY')}</td>
                                         <td>{item.formStatus.status}</td>
                                     </tr>
@@ -176,7 +201,26 @@ export default function ListRequests() {
                         <Form.Group className="form-group">
                             <Form.Label><h5>Content</h5></Form.Label>
                             <Form.Control as="textarea" className="form-control" onChange={handleChangeCreate}
-                                name="content" rows={5} />
+                                name="content" rows={4} />
+                        </Form.Group>
+                        <Form.Group className="form-group">
+                            <Form.Label><h5>Reason</h5></Form.Label>
+                            <Form.Control as="textarea" className="form-control" onChange={handleChangeCreate}
+                                name="reason" rows={3} />
+                        </Form.Group>
+                        <Form.Select aria-label="Default select example" className="mt-3"
+                            style={{ width: "40%" }} name="requestTypeId" onChange={handleChangeCreate} >
+                            <option>Select request type</option>
+                            <option value="1">Off full day</option>
+                            <option value="2">Off morning</option>
+                            <option value="3">Off afternoon</option>
+                            <option value="4">Off by hour</option>
+                            <option value="5">Lately checkin-out</option>
+                        </Form.Select>
+                        <Form.Group className="mt-2 col-3">
+                            <Form.Label><h5>Date off</h5></Form.Label>
+                            <Form.Control value={moment(createForm.requestDate).format("YYYY-MM-DD")} type="date"
+                                onChange={handleChangeCreate} name="requestDate" />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
