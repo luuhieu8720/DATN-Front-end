@@ -99,7 +99,11 @@ export default function ListReports() {
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
 
-    const [reportFilter, setReportFilter] = useState(new ReportsFilter({userId: currentUser.userId}));
+    const [reportFilter, setReportFilter] = useState(new ReportsFilter(
+        {
+            userId: currentUser.userId,
+            dateTime: new Date()
+        }));
 
     // Here we use item offsets; we could also use page offsets
     // following the API or data you're working with.

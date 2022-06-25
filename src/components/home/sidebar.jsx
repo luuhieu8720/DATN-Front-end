@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Image } from 'react-bootstrap';
 import './css/sidebars.css';
 import SignOut from '../../logics/SignOut';
 
@@ -11,7 +12,9 @@ function SideBar() {
 
     return (
         <div className='max-content'>
-            <h2 className="my-3 text-white">Suruga</h2>
+            <div>
+                <h2 className="mt-4 ms-3 text-white">Suruga</h2>
+            </div>
             <div className="pt-3">
                 <ul className="list-unstyled ps-0">
                     <li className="mb-1">
@@ -58,6 +61,7 @@ function SideBar() {
                                 <li hidden={role != "Manager"}><Link to="/reports/manage/manager" className="link-dark rounded">Reports</Link></li>
                                 <li hidden={role != "Admin"}><Link to="/requests/manage/admin" className="link-dark rounded">Requests</Link></li>
                                 <li hidden={role != "Manager"}><Link to="/requests/manage/manager" className="link-dark rounded">Requests</Link></li>
+                                <li hidden={role != "Admin"}><Link to="/departments" className="link-dark rounded">Departments</Link></li>
                                 <li hidden={role != "Admin"}><Link to="/workingtime-tracking/manage/admin" className="link-dark rounded">User working time</Link></li>
                                 <li hidden={role != "Manager"}><Link to="/workingtime-tracking/manage/manager" className="link-dark rounded">User working time</Link></li>
                             </ul>

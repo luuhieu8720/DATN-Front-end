@@ -71,7 +71,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1865,10 +1865,9 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
-                "Accept": "text/plain",
-                "Authorization": "Bearer" + " " + currentUser.token
+                "Accept": "text/plain"
             }
         };
 
@@ -2208,7 +2207,7 @@ export interface ICommentForm {
 export class Department implements IDepartment {
     id?: string;
     name?: string | undefined;
-    managerId?: string;
+    managerId?: string | undefined;
     manager?: User;
 
     constructor(data?: IDepartment) {
@@ -2249,7 +2248,7 @@ export class Department implements IDepartment {
 export interface IDepartment {
     id?: string;
     name?: string | undefined;
-    managerId?: string;
+    managerId?: string | undefined;
     manager?: User;
 }
 
@@ -2588,7 +2587,7 @@ export interface IUserShorted {
 export class DepartmentItem implements IDepartmentItem {
     id?: string;
     name?: string | undefined;
-    managerId?: string;
+    managerId?: string | undefined;
     manager?: UserShorted;
 
     constructor(data?: IDepartmentItem) {
@@ -2629,13 +2628,13 @@ export class DepartmentItem implements IDepartmentItem {
 export interface IDepartmentItem {
     id?: string;
     name?: string | undefined;
-    managerId?: string;
+    managerId?: string | undefined;
     manager?: UserShorted;
 }
 
 export class DepartmentForm implements IDepartmentForm {
     name!: string;
-    managerId!: string;
+    managerId?: string | undefined;
 
     constructor(data?: IDepartmentForm) {
         if (data) {
@@ -2670,7 +2669,7 @@ export class DepartmentForm implements IDepartmentForm {
 
 export interface IDepartmentForm {
     name: string;
-    managerId: string;
+    managerId?: string | undefined;
 }
 
 export class UserDetail implements IUserDetail {
@@ -2760,7 +2759,7 @@ export interface IUserDetail {
 export class DepartmentDetail implements IDepartmentDetail {
     id?: string;
     name?: string | undefined;
-    managerId?: string;
+    managerId?: string | undefined;
     manager?: UserDetail;
 
     constructor(data?: IDepartmentDetail) {
@@ -2801,7 +2800,7 @@ export class DepartmentDetail implements IDepartmentDetail {
 export interface IDepartmentDetail {
     id?: string;
     name?: string | undefined;
-    managerId?: string;
+    managerId?: string | undefined;
     manager?: UserDetail;
 }
 
@@ -4066,14 +4065,15 @@ export interface IUserItem {
 }
 
 export class UserFormCreate implements IUserFormCreate {
-    firstName?: string | undefined;
-    lastName?: string | undefined;
-    dateOfBirth?: Date;
+    username!: string;
+    firstName!: string;
+    lastName!: string;
+    dateOfBirth!: Date;
     phone?: string | undefined;
     address?: string | undefined;
     avatarUrl?: string | undefined;
-    email?: string | undefined;
-    password?: string | undefined;
+    email!: string;
+    password!: string;
     departmentId?: string | undefined;
     role?: Role;
 
@@ -4088,6 +4088,7 @@ export class UserFormCreate implements IUserFormCreate {
 
     init(_data?: any) {
         if (_data) {
+            this.username = _data["username"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.dateOfBirth = _data["dateOfBirth"] ? new Date(_data["dateOfBirth"].toString()) : <any>undefined;
@@ -4110,6 +4111,7 @@ export class UserFormCreate implements IUserFormCreate {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["username"] = this.username;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
@@ -4125,14 +4127,15 @@ export class UserFormCreate implements IUserFormCreate {
 }
 
 export interface IUserFormCreate {
-    firstName?: string | undefined;
-    lastName?: string | undefined;
-    dateOfBirth?: Date;
+    username: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
     phone?: string | undefined;
     address?: string | undefined;
     avatarUrl?: string | undefined;
-    email?: string | undefined;
-    password?: string | undefined;
+    email: string;
+    password: string;
     departmentId?: string | undefined;
     role?: Role;
 }

@@ -99,10 +99,12 @@ export default function Profile() {
                 dateOfBirth: moment(value).format("YYYY-MM-DD"),
             });
         }
-        setUserUpdateForm({
-            ...userUpdateForm,
-            [evt.target.name]: value,
-        });
+        else {
+            setUserUpdateForm({
+                ...userUpdateForm,
+                [evt.target.name]: value,
+            });
+        }
         console.log(userUpdateForm)
     }
 
@@ -127,12 +129,12 @@ export default function Profile() {
                 <div className="col-sm-8 mt-4">
                     <div className="tab-content">
                         <Form.Group id="registrationForm" className="form-group">
-                            <Form.Group className="col-xs-6" style={{width:"60%"}}>
+                            <Form.Group className="col-xs-6" style={{ width: "60%" }}>
                                 <Form.Label><h5>First name</h5></Form.Label>
                                 <Form.Control type="text" className="form-control" onChange={handleChange}
                                     name="firstName" id="first_name" defaultValue={user.firstName} />
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
                                 <div className="col-xs-6">
                                     <Form.Label><h5>Last name</h5></Form.Label>
                                     <Form.Control type="text" className="form-control" onChange={handleChange}
@@ -140,7 +142,7 @@ export default function Profile() {
                                 </div>
                             </Form.Group>
 
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
 
                                 <div className="col-xs-6">
                                     <Form.Label><h5>Phone</h5></Form.Label>
@@ -148,7 +150,7 @@ export default function Profile() {
                                         name="phone" id="phone" defaultValue={user.phone} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
 
                                 <div className="col-xs-6">
                                     <Form.Label><h5>Email</h5></Form.Label>
@@ -156,7 +158,7 @@ export default function Profile() {
                                         name="email" id="email" defaultValue={user.email} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
 
                                 <div className="col-xs-6">
                                     <label><h5>Location</h5></label>
@@ -164,7 +166,7 @@ export default function Profile() {
                                         name="address" defaultValue={user.address} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"60%"}}>
+                            <Form.Group className="form-group" style={{ width: "60%" }}>
                                 <div className="col-xs-6">
                                     <label><h5>Date of birth</h5></label>
                                     <Form.Control type="date" onChange={handleChange}
@@ -172,7 +174,7 @@ export default function Profile() {
                                         value={moment(userUpdateForm.dateOfBirth).format("YYYY-MM-DD")} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{width:"50%"}}>
+                            <Form.Group className="form-group" style={{ width: "50%" }}>
                                 <div className="col-xs-12">
                                     <br />
                                     <Button onClick={handleSubmit} type="submit"><i className="glyphicon glyphicon-ok-sign"></i> Save</Button>

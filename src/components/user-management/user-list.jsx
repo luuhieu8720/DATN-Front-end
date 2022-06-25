@@ -1,11 +1,13 @@
-import { Client } from "../../generated/models";
+import { Client, Role, UserFormCreate } from "../../generated/models";
 import { useState, useEffect } from "react";
 import UserThumbnail from "./user-thumbnail";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router";
-import { Table } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import './css/user-list.css';
 import ReactPaginate from 'react-paginate';
+import { Modal, Form } from "react-bootstrap";
+import moment from "moment";
 
 function UserList() {
     const [userList, setUserList] = useState([]);
@@ -18,11 +20,67 @@ function UserList() {
     // following the API or data you're working with.
     const [itemOffset, setItemOffset] = useState(0);
 
+    const [createUserForm, setCreateUserForm] = useState(new UserFormCreate({
+        role: 1
+    }));
+
+    const handleSubmit = () => {
+        console.log(createUserForm);
+        clientServices.usersPOST(createUserForm)
+            .then(() => {
+                toast.success("Created successfully");
+                window.location.reload();
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+    }
+
+    const [selectedValue, setSelectedValue] = useState()
+
+    const [departments, setDepartments] = useState([])
+
+    const handleShow = () => setShow(true);
+
+    const handleClose = () => setShow(false);
+    const [show, setShow] = useState(false);
+
+    const handleChange = (evt) => {
+        const value = evt.target.value;
+        if (evt.target.name == "dateOfBirth") {
+            setCreateUserForm({
+                ...createUserForm,
+                dateOfBirth: moment(value).format("YYYY-MM-DD"),
+            });
+        }
+        else if (evt.target.name == "departmentId") {
+            setSelectedValue(value);
+            if (value == "None") {
+                setCreateUserForm({ ...createUserForm, departmentId: "" })
+            }
+            else {
+                setCreateUserForm({ ...createUserForm, departmentId: value })
+            }
+        }
+        else {
+            setCreateUserForm({
+                ...createUserForm,
+                [evt.target.name]: value,
+            });
+        }
+    }
+
+    const handleChangeRole = (evt) => {
+        const value = evt.target.value;
+        setCreateUserForm({ ...createUserForm, role: value })
+    }
+
     var history = useNavigate();
     useEffect(
         () => {
             var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-            console.log(currentUser)
             if (currentUser.role != "Admin" && currentUser.role != "Manager") {
                 alert("You do not have access to this page");
                 setTimeout(() => {
@@ -34,6 +92,16 @@ function UserList() {
                 .then((res) => {
                     setUserList(res);
                 }).catch(function (error) {
+                    if (error.response) {
+                        toast.error(error.response);
+                    }
+                });
+
+            clientServices.departmentsAll()
+                .then((res) => {
+                    setDepartments(res);
+                })
+                .catch(function (error) {
                     if (error.response) {
                         toast.error(error.response);
                     }
@@ -77,13 +145,14 @@ function UserList() {
     return (
         <div className="">
             <ToastContainer />
-            <h3 className="text-center mt-3" style={{marginBottom:"60px"}}>User management</h3>
+            <h3 className="text-center mt-3" style={{ marginBottom: "20px" }}>User management</h3>
+            <Button style={{ marginBottom: "30px", marginLeft: "80%" }} onClick={handleShow}>Create user<i className="fa fa-plus ms-2"></i></Button>
             <div>
                 <Items currentItems={currentItems} />
             </div>
 
-            <div style={{marginLeft:"50%"}}>
-                <ReactPaginate 
+            <div style={{ marginLeft: "50%" }}>
+                <ReactPaginate
                     breakLabel="..."
                     nextLabel=">"
                     onPageChange={handlePageClick}
@@ -103,6 +172,102 @@ function UserList() {
                     activeClassName={'active'}
                 />
             </div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create new user</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="form-group row mb-2">
+                            <div className="col-6">
+                                <Form.Label>Firstname (*)</Form.Label>
+                                <Form.Control type="text" className="form-control"
+                                    name="firstName" onChange={handleChange} />
+                            </div>
+                            <div className="col-6">
+                                <Form.Label>Lastname (*)</Form.Label>
+                                <Form.Control type="text" className="form-control"
+                                    name="lastName" onChange={handleChange} />
+                            </div>
+                        </Form.Group>
+                        <Form.Group className="row">
+                            <div className="col-6">
+                                <Form.Label>Phone</Form.Label>
+                                <Form.Control type="text" className="form-control"
+                                    name="phone" onChange={handleChange} />
+                            </div>
+                            <div className="col-6">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control type="text" className="form-control"
+                                    name="username" onChange={handleChange} />
+                            </div>
+
+                        </Form.Group>
+                        <Form.Group className="form-group mb-2">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control type="text" className="form-control"
+                                name="address" onChange={handleChange} />
+                        </Form.Group>
+                        <Form.Group className="form-group row mb-2">
+                            <div className="col-6">
+                                <Form.Label>Email (*)</Form.Label>
+                                <Form.Control type="text" className="form-control"
+                                    name="email" onChange={handleChange} />
+                            </div>
+                            <div className="col-6">
+                                <Form.Label>Password (*)</Form.Label>
+                                <Form.Control type="password" className="form-control"
+                                    name="password" onChange={handleChange} />
+                            </div>
+                        </Form.Group>
+                        <Form.Group className="form-group row mb-2">
+                            <div className="col-6">
+                                <Form.Label>Date of birth</Form.Label>
+                                <Form.Control type="date" className="form-control"
+                                    name="dateOfBirth" onChange={handleChange} />
+                            </div>
+                            <div className="col-6">
+                                <Form.Label className="ms-1">Choose department</Form.Label>
+                                <Form.Select aria-label="Default select example"
+                                    onChange={handleChange} name="departmentId" value={selectedValue}>
+                                    <option value={"None"}>None</option>
+                                    {
+                                        departments.map((option, index) => {
+                                            return (<option key={option.name} value={option.id}>{option.name}</option>)
+                                        })
+                                    }
+                                </Form.Select>
+                            </div>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" onChange={handleChangeRole}>
+                                <Form.Check
+                                    inline
+                                    label="Employee"
+                                    name="role"
+                                    type="radio"
+                                    value="1"
+                                    defaultChecked
+                                />
+                                <Form.Check
+                                    inline
+                                    label="Manager"
+                                    name="role"
+                                    type="radio"
+                                    value="2"
+                                />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleSubmit}>
+                        Save
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

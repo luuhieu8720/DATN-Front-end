@@ -6,6 +6,7 @@ import { Form } from "react-bootstrap";
 import { Button, Table } from "react-bootstrap";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import ErrorPage from "../../pages/error-page";
 
 export default function UserReportsManager() {
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -157,6 +158,8 @@ export default function UserReportsManager() {
     };
 
     console.log(departments)
+
+    if (currentUser.role != "Manager") return (<ErrorPage />)
     if (!departments || !listReports) return (<p>Loading</p>)
 
     return (

@@ -9,7 +9,6 @@ import { useState } from "react";
 
 function UserThumbnail(props) {
 	const user = props.user;
-	console.log(user)
 
 	var clientService = new Client();
 

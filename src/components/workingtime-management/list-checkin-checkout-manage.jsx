@@ -77,27 +77,27 @@ export default function ListCheckinManage() {
         if (!currentItems) return (<p>Loading</p>)
 
         return (
-            <div style={{margin:"auto"}}>
+            <div style={{margin:"auto"}} className="mt-3 ms-2">
                 <h3 className="text-center">Working timesheets</h3>
                 <h5 style={{display:"inline"}}>User: </h5><p style={{display:"inline"}}> { currentItems[0] ? `${currentItems[0].user.firstName} ${currentItems[0].user.lastName}` : "" } </p>
                 <Form className="row">
-                    <Form.Group className="mb-3 col-6">
+                    <Form.Group className="mb-3 col-3">
                         <Form.Label>Filter by month</Form.Label>
                         <Form.Control type="date" name="dateTime"
                             onChange={handleChange} value={filterTimeKeeping.dateTime} />
 
                     </Form.Group>
-                    <Button className="col-2" style={{ height: "40px", marginTop: "30px" }}
+                    <Button className="col-1" style={{ height: "40px", marginTop: "30px" }}
                         onClick={handleFilter} >Filter</Button>
                 </Form>
-                <Table striped bordered hover className="mt-4" >
+                <Table striped bordered hover className="mt-4" style={{ width:"70%" }}  >
                     <thead >
                         <tr>
                             <th style={{ width: "30px" }}>#</th>
-                            <th style={{ width: "200px" }}>Date</th>
+                            <th style={{ width: "150px" }}>Date</th>
                             <th style={{ width: "150px" }}>Checkin time</th>
                             <th style={{ width: "150px" }}>Checkout time</th>
-                            <th style={{ width: "150px" }}>Punished</th>
+                            <th style={{ width: "50px" }}>Punished</th>
                         </tr>
                     </thead>
                     {

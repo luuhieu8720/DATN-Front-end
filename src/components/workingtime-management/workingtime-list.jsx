@@ -36,9 +36,14 @@ export default function UsersWorkingTime() {
         if (evt.target.name == "dateTime") {
             setWorkingTimeFilter({ ...workingTimeFilter, dateTime: moment(value.toLocaleString()).format("YYYY-MM-DD") })
         }
-        else {
-            setWorkingTimeFilter({ ...workingTimeFilter, [evt.target.name]: value })
+        else if (evt.target.name == "departmentId") {
             setSelectedValue(value);
+            if (value == "None") {
+                setWorkingTimeFilter({ ...workingTimeFilter, departmentId: "" })
+            }
+            else {
+                setWorkingTimeFilter({ ...workingTimeFilter, departmentId: value })
+            }
         }
         console.log(workingTimeFilter)
     }
@@ -47,7 +52,7 @@ export default function UsersWorkingTime() {
         return (
             <div>
                 <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
-                    <h3 className="text-center">User reports</h3>
+                    <h3 className="text-center">User Working Timesheets</h3>
                     <Form className="row">
                         <Form.Label className="ms-3"><h4>Filter</h4></Form.Label>
                         <Form.Group className="mb-3 col-3 ms-3">
@@ -59,6 +64,7 @@ export default function UsersWorkingTime() {
                             <Form.Label className="ms-1">By department</Form.Label>
                             <Form.Select aria-label="Default select example"
                                 onChange={handleChange} name="departmentId" value={selectedValue}>
+                                <option value={"None"}>None</option>
                                 {
                                     departments.map((option, index) => {
                                         return (<option key={option.name} value={option.id}>{option.name}</option>)

@@ -6,9 +6,11 @@ import { Form } from "react-bootstrap";
 import { Button, Table } from "react-bootstrap";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import ErrorPage from "../../pages/error-page";
 
 export default function UserReports() {
     const [listReports, setlistReports] = useState([]);
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const handleFilter = () => {
         clientService.allPOST(reportFilter)
@@ -36,9 +38,14 @@ export default function UserReports() {
         if (evt.target.name == "dateTime") {
             setReportFilter({ ...reportFilter, dateTime: moment(value.toLocaleString()).format("YYYY-MM-DD") })
         }
-        else {
-            setReportFilter({ ...reportFilter, [evt.target.name]: value })
+        else if (evt.target.name == "departmentId") {
             setSelectedValue(value);
+            if (value == "None") {
+                setReportFilter({ ...reportFilter, departmentId: "" })
+            }
+            else {
+                setReportFilter({ ...reportFilter, departmentId: value })
+            }
         }
         console.log(reportFilter)
     }
@@ -59,6 +66,7 @@ export default function UserReports() {
                             <Form.Label className="ms-1">By department</Form.Label>
                             <Form.Select aria-label="Default select example"
                                 onChange={handleChange} name="departmentId" value={selectedValue}>
+                                <option value={"None"}>None</option>
                                 {
                                     departments.map((option, index) => {
                                         return (<option key={option.name} value={option.id}>{option.name}</option>)
@@ -154,6 +162,7 @@ export default function UserReports() {
     };
 
     console.log(departments)
+    if (currentUser.role != "Admin") return (<ErrorPage />)
     if (!departments || !listReports) return (<p>Loading</p>)
 
     return (

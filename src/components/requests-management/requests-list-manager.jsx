@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
 import RequestLogic from "../requests/request-logics";
+import ErrorPage from "../../pages/error-page";
 
 export default function RequestsListManager() {
     const [dateTime, setDateTime] = useState();
@@ -62,7 +63,7 @@ export default function RequestsListManager() {
         return (
             <div>
                 <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
-                    <h3 className="text-center">User requestS list</h3>
+                    <h3 className="text-center">User requests list</h3>
                     <Form className="row ms-3">
                         <Form.Group className="mb-3 col-3">
                             <Form.Label>Filter by month</Form.Label>
@@ -76,7 +77,8 @@ export default function RequestsListManager() {
                     <Table striped bordered hover className="mt-4" >
                         <thead >
                             <tr>
-                                <th style={{ width: "50px" }}>#</th>
+                                <th style={{ width: "30px" }}>#</th>
+                                <th style={{ width: "250px" }}>User</th>
                                 <th style={{ width: "250px" }}>Content</th>
                                 <th style={{ width: "250px" }}>Reason</th>
                                 <th style={{ width: "150px" }}>Request type</th>
@@ -92,6 +94,7 @@ export default function RequestsListManager() {
                                     <tbody>
                                         <tr>
                                             <td>{index + 1}</td>
+                                            <td>{item.user ? `${item.user.firstName} ${item.user.lastName}` : ""}</td>
                                             <td>{item.content}</td>
                                             <td>{item.reason}</td>
                                             <td>{item.requestType.typeName}</td>
@@ -114,6 +117,7 @@ export default function RequestsListManager() {
                                             </Modal.Header>
                                             <Modal.Body>
                                                 <Form>
+                                                    <Form.Label ><h5>{currentItem.user ? `${currentItem.user.firstName} ${currentItem.user.lastName}` : ""}</h5></Form.Label>
                                                     <Form.Group className="form-group mb-1">
                                                         <Form.Label><h5>Content</h5></Form.Label>
                                                         <Form.Control as="textarea" className="form-control" disabled={true}
@@ -153,10 +157,15 @@ export default function RequestsListManager() {
                                             </Modal.Body>
 
                                             <Modal.Footer>
-                                                <Button variant="secondary" hidden={currentItem.formStatus ? (currentItem.formStatus.status != "Pending") : false} onClick={handleReject}>
+                                                <Button variant="secondary"
+                                                    hidden={(currentItem.formStatus ? (currentItem.formStatus.status != "Pending") : false) ||
+                                                        (currentItem.userId == currentUser.userId)}
+                                                    onClick={handleReject}>
                                                     Reject
                                                 </Button>
-                                                <Button variant="primary" hidden={currentItem.formStatus ? currentItem.formStatus.status != "Pending" : false} onClick={handleApprove}>
+                                                <Button variant="primary"
+                                                    hidden={(currentItem.formStatus ? currentItem.formStatus.status != "Pending" : false) ||
+                                                        (currentItem.userId == currentUser.userId)} onClick={handleApprove}>
                                                     Approve
                                                 </Button>
 
@@ -219,6 +228,7 @@ export default function RequestsListManager() {
         setItemOffset(newOffset);
     };
 
+    if (currentUser.role != "Manager") return (<ErrorPage />)
 
     return (
         <div>

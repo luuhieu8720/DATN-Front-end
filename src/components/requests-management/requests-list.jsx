@@ -5,8 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { Table, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
 import RequestLogic from "../requests/request-logics";
+import ErrorPage from "../../pages/error-page";
 
 export default function RequestsList() {
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [dateTime, setDateTime] = useState();
     const [currentItem, setCurrentItem] = useState(new FormRequestDetail());
     var { confirm } = RequestLogic();
@@ -38,9 +40,14 @@ export default function RequestsList() {
         if (evt.target.name == "dateTime") {
             setFilterRequest({ ...filterRequest, dateTime: moment(value.toLocaleString()).format("YYYY-MM-DD") })
         }
-        else {
-            setFilterRequest({ ...filterRequest, [evt.target.name]: value })
+        else if (evt.target.name == "departmentId") {
             setSelectedValue(value);
+            if (value == "None") {
+                setFilterRequest({ ...filterRequest, departmentId: "" })
+            }
+            else {
+                setFilterRequest({ ...filterRequest, departmentId: value })
+            }
         }
 
         setDateTime(moment(filterRequest.dateTime).format("YYYY-MM-DD"));
@@ -80,6 +87,7 @@ export default function RequestsList() {
                             <Form.Label className="ms-1">By department</Form.Label>
                             <Form.Select aria-label="Default select example"
                                 onChange={handleChangeFilter} name="departmentId" value={selectedValue}>
+                                <option value={"None"}>None</option>
                                 {
                                     departments.map((option, index) => {
                                         return (<option key={option.name} value={option.id}>{option.name}</option>)
@@ -239,7 +247,7 @@ export default function RequestsList() {
         setItemOffset(newOffset);
     };
 
-
+    if (currentUser.role != "Admin") return (<ErrorPage />)
     return (
         <div>
             <ToastContainer />

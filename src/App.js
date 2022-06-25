@@ -21,6 +21,8 @@ import RequestsList from "./components/requests-management/requests-list";
 import UsersWorkingTime from "./components/workingtime-management/workingtime-list";
 import UsersWorkingTimeManager from "./components/workingtime-management/workingtime-list-manager";
 import ListCheckinManage from "./components/workingtime-management/list-checkin-checkout-manage";
+import CreateUser from "./components/user-management/create-user";
+import DepartmentsList from "./components/departments-management/departments-list";
 
 function App() {
   return (
@@ -35,11 +37,13 @@ function App() {
           <Route exact path="/requests/manage/manager" element={<RequestsListManager />}></Route>
           <Route exact path="/requests/manage/admin" element={<RequestsList />}></Route>
           <Route exact path="/reports/list" element={<ListReports />}></Route>
+          <Route exact path="/users/create" element={<CreateUser />}></Route>
           <Route exact path="/users/manage/admin" element={<UserList />}></Route>
           <Route exact path="/users/manage/manager" element={<UserListManager />}></Route>
           <Route exact path="/users/profile/:id" element={<UserProfile />}></Route>
           <Route exact path="/reports/manage/admin" element={<UserReports />}></Route>
           <Route exact path="/reports/manage/manager" element={<UserReportsManager />}></Route>
+          <Route exact path="/departments" element={<DepartmentsList />}></Route>
           <Route exact path="/reports/detail/:id" element={<ReportDetailPage />}></Route>
           <Route exact path="/workingtime-tracking/manage/admin" element={<UsersWorkingTime />}></Route>
           <Route exact path="/workingtime-tracking/manage/manager" element={<UsersWorkingTimeManager />}></Route>

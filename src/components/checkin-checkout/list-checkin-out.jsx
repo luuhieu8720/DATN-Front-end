@@ -116,7 +116,7 @@ export default function ListCheckin(props) {
 
     let clientService = new Client();
 
-    const itemsPerPage = 4;
+    const itemsPerPage = 5;
     const [currentItems, setCurrentItems] = useState(null);
     const [pageCount, setPageCount] = useState(0);
     // Here we use item offsets; we could also use page offsets

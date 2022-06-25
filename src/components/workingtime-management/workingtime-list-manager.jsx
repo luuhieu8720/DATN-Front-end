@@ -38,7 +38,7 @@ export default function UsersWorkingTimeManager() {
         return (
             <div>
                 <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
-                    <h3 className="text-center">User working time</h3>
+                    <h3 className="text-center">User Working Timesheets</h3>
                     <Form className="row">
                         <Form.Label className="ms-3"><h4>Filter</h4></Form.Label>
                         <Form.Group className="mb-3 col-3 ms-3">
