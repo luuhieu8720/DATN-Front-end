@@ -7,9 +7,14 @@ import moment from "moment";
 import { useNavigate, useParams } from "react-router";
 import ProfileLogic from "../profile/profile-logics";
 import { Link } from "react-router-dom";
+import ErrorPage from "../../pages/error-page";
 
 export default function UserProfile() {
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    const [listDepartment, setListDepartment] = useState([]);
+
+    const [selectedValue, setSelectedValue] = useState()
 
     var history = useNavigate();
 
@@ -50,36 +55,10 @@ export default function UserProfile() {
         phone: "",
         address: "",
         departmentId: "",
-        department: "",
         role: ""
     }));
 
-    var checkTime = (time) => {
-        if (time < 10)
-            return '0' + time.toString();
-        return time;
-    }
-
-    const convertDateTime = (dateTime) => {
-        var date = dateTime.getFullYear() + '-' + (checkTime(dateTime.getMonth() + 1)) + '-'
-            + checkTime(dateTime.getDate());
-        var time = checkTime(dateTime.getHours()) + ":" +
-            checkTime(dateTime.getMinutes()) + ":" +
-            checkTime(dateTime.getSeconds());
-        return date + "T" + time;
-    }
-
     useEffect(() => {
-        if (currentUser) {
-            if (currentUser.role != "Admin" && currentUser.role != "Manager") {
-                alert("You don't have permission to this page");
-
-                setTimeout(() => {
-                    history("/");
-                }, 1000);
-            }
-        }
-
         var t = getUser();
         clientService.usersGET(id.id)
             .then((res) => {
@@ -98,13 +77,26 @@ export default function UserProfile() {
                     avatarUrl: res.avatarUrl
                 }));
                 setDateOfBirth(res.dateOfBirth)
+                setSelectedValue(res.department ? res.department.name : "None")
+                console.log(res.department.name)
             })
             .catch(function (error) {
                 if (error.response) {
                     toast.error(error.response);
                 }
             });
-    }, [user.id])
+
+        clientService.departmentsAll()
+            .then((res) => {
+                setListDepartment(res);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+
+    }, [userUpdateForm.id, listDepartment.length])
 
     const handleChange = (evt) => {
         const value = evt.target.value;
@@ -115,24 +107,34 @@ export default function UserProfile() {
                 dateOfBirth: moment(value).format("YYYY-MM-DD"),
             });
         }
-        setUserUpdateForm({
-            ...userUpdateForm,
-            [evt.target.name]: value,
-        });
+
+        else if (evt.target.name == "departmentId") {
+            setSelectedValue(value);
+            if (value == "None") {
+                setUserUpdateForm({ ...userUpdateForm, departmentId: "" })
+            }
+            else {
+                setUserUpdateForm({ ...userUpdateForm, departmentId: value })
+            }
+        }
+
+        else {
+            setUserUpdateForm({
+                ...userUpdateForm,
+                [evt.target.name]: value,
+            });
+        }
         console.log(userUpdateForm)
     }
 
     const handleSubmit = () => {
-        console.log(userUpdateForm.dateOfBirth)
+        console.log(userUpdateForm)
         updateUser(id.id, userUpdateForm);
     }
 
-    if (!user) return (<p>Loading</p>)
+    if (!user || !listDepartment || !selectedValue) return (<p>Loading</p>)
 
-    if (!currentUser) return (<div>
-        <p>You need to login</p>
-        <Link to="/login">Login</Link>
-    </div>)
+    if ( !currentUser && (currentUser ? (currentUser.role != "Admin" && currentUser.role != "Manager") : true)) return (<ErrorPage />)
 
     return (
         <div className="container bootstrap snippet">
@@ -171,11 +173,11 @@ export default function UserProfile() {
                                         name="phone" id="phone" defaultValue={user.phone} />
                                 </div>
                             </Form.Group>
-                            <Form.Group className="form-group" style={{ width: "60%" }}>
+                            <Form.Group className="form-group" style={{ width: "60%" }} >
 
                                 <div className="col-xs-6">
                                     <Form.Label><h5>Email</h5></Form.Label>
-                                    <Form.Control type="email" className="form-control" onChange={handleChange}
+                                    <Form.Control disabled={true} type="email" className="form-control" onChange={handleChange}
                                         name="email" id="email" defaultValue={user.email} />
                                 </div>
                             </Form.Group>
@@ -194,6 +196,21 @@ export default function UserProfile() {
                                         name="dateOfBirth"
                                         value={moment(userUpdateForm.dateOfBirth).format("YYYY-MM-DD")} />
                                 </div>
+                            </Form.Group>
+                            <Form.Group className="" style={{ width: "60%" }}>
+                                <Form.Label><h5>Department</h5></Form.Label>
+                                <Form.Select aria-label="Default select example"
+                                    value={selectedValue}
+                                    defaultValue={"Dev back-end"}
+                                    onChange={handleChange} name="departmentId"
+                                >
+                                    <option value={"None"}>None</option>
+                                    {
+                                        listDepartment.map((option, index) => {
+                                            return (<option key={option.name} value={option.id}>{option.name}</option>)
+                                        })
+                                    }
+                                </Form.Select>
                             </Form.Group>
                             <Form.Group className="form-group" style={{ width: "50%" }}>
                                 <div className="col-xs-12">

@@ -8,7 +8,11 @@ import SignOut from '../../logics/SignOut';
 function SideBar() {
     var { signOut } = SignOut();
 
-    var role = JSON.parse(localStorage.getItem("currentUser")).role;
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));    
+
+    if (!currentUser) return (<div style={{width:"200px"}}>
+                <h2 className="mt-4 ms-3 text-white">Suruga</h2>
+            </div>)
 
     return (
         <div className='max-content'>
@@ -28,12 +32,12 @@ function SideBar() {
                         </Button>
                     </li>
                     <li className="mb-1">
-                        <Button variant="btn btn-sidebar rounded text-start" className='dark' hidden={role == "Admin"} >
+                        <Button variant="btn btn-sidebar rounded text-start" className='dark' hidden={currentUser.role == "Admin"} >
                             <Link to="/requests/list" style={{ textDecoration: 'none' }}>My requests</Link>
                         </Button>
                     </li>
 
-                    <li className="mb-1" hidden={role != "Employee"}>
+                    <li className="mb-1" hidden={currentUser.role != "Employee"}>
                         <Button variant="btn btn-sidebar rounded text-start" className='dark'>
                             <Link to={"/reports/list"} style={{ textDecoration: 'none' }}>Reports</Link>
                         </Button>
@@ -50,20 +54,20 @@ function SideBar() {
                         </div>
                     </li>
                     <li className="mb-1">
-                        <Button variant="btn btn-toggle rounded collapsed text-start" hidden={role == "Employee"} data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                        <Button variant="btn btn-toggle rounded collapsed text-start" hidden={currentUser.role == "Employee"} data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
                             Manage
                         </Button>
                         <div className="collapse" id="home-collapse">
                             <ul className="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li hidden={role != "Admin"}><Link to="/users/manage/admin" className="link-dark rounded">Users</Link></li>
-                                <li hidden={role != "Manager"}><Link to="/users/manage/manager" className="link-dark rounded">Users</Link></li>
-                                <li hidden={role != "Admin"}><Link to="/reports/manage/admin" className="link-dark rounded">Reports</Link></li>
-                                <li hidden={role != "Manager"}><Link to="/reports/manage/manager" className="link-dark rounded">Reports</Link></li>
-                                <li hidden={role != "Admin"}><Link to="/requests/manage/admin" className="link-dark rounded">Requests</Link></li>
-                                <li hidden={role != "Manager"}><Link to="/requests/manage/manager" className="link-dark rounded">Requests</Link></li>
-                                <li hidden={role != "Admin"}><Link to="/departments" className="link-dark rounded">Departments</Link></li>
-                                <li hidden={role != "Admin"}><Link to="/workingtime-tracking/manage/admin" className="link-dark rounded">User working time</Link></li>
-                                <li hidden={role != "Manager"}><Link to="/workingtime-tracking/manage/manager" className="link-dark rounded">User working time</Link></li>
+                                <li hidden={currentUser.role != "Admin"}><Link to="/users/manage/admin" className="link-dark rounded">Users</Link></li>
+                                <li hidden={currentUser.role != "Manager"}><Link to="/users/manage/manager" className="link-dark rounded">Users</Link></li>
+                                <li hidden={currentUser.role != "Admin"}><Link to="/reports/manage/admin" className="link-dark rounded">Reports</Link></li>
+                                <li hidden={currentUser.role != "Manager"}><Link to="/reports/manage/manager" className="link-dark rounded">Reports</Link></li>
+                                <li hidden={currentUser.role != "Admin"}><Link to="/requests/manage/admin" className="link-dark rounded">Requests</Link></li>
+                                <li hidden={currentUser.role != "Manager"}><Link to="/requests/manage/manager" className="link-dark rounded">Requests</Link></li>
+                                <li hidden={currentUser.role != "Admin"}><Link to="/departments" className="link-dark rounded">Departments</Link></li>
+                                <li hidden={currentUser.role != "Admin"}><Link to="/workingtime-tracking/manage/admin" className="link-dark rounded">User working time</Link></li>
+                                <li hidden={currentUser.role != "Manager"}><Link to="/workingtime-tracking/manage/manager" className="link-dark rounded">User working time</Link></li>
                             </ul>
                         </div>
                     </li>

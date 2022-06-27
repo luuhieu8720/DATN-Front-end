@@ -46,11 +46,11 @@ export default function ProfileLogic(userId: string) {
                     window.location.reload();
                 }, 3000);
             })
-            .catch((e) => {
-                if (e.resonse) {
-                    toast.error(e.response)
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
                 }
-            })
+            });
     }
 
     return {

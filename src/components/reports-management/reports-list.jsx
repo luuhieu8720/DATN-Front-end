@@ -161,7 +161,11 @@ export default function UserReports() {
         setItemOffset(newOffset);
     };
 
-    console.log(departments)
+    if (!currentUser) return (<div>
+        <p>You need to login</p>
+        <Link to="/login">Login</Link>
+    </div>)
+
     if (currentUser.role != "Admin") return (<ErrorPage />)
     if (!departments || !listReports) return (<p>Loading</p>)
 

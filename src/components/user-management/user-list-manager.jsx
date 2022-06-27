@@ -6,9 +6,11 @@ import { useNavigate } from "react-router";
 import { Table } from "react-bootstrap";
 import './css/user-list.css';
 import ReactPaginate from 'react-paginate';
+import ErrorPage from "../../pages/error-page";
 
 function UserListManager() {
     const [userList, setUserList] = useState([]);
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let clientServices = new Client();
 
     const itemsPerPage = 4;
@@ -22,23 +24,17 @@ function UserListManager() {
     var history = useNavigate();
     useEffect(
         () => {
-            var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-            if (currentUser.role != "Admin" && currentUser.role != "Manager") {
-                alert("You do not have access to this page");
-                setTimeout(() => {
-                    history("/");
-                }, 1000);
-            }
+            if (!currentUser) return (<ErrorPage />)
 
             clientServices.usersGET(currentUser.userId)
-            .then((res) => {
-                setDepartmentId(res.departmentId);
-            })
-            .catch(function (error) {
-                if (error.response) {
-                    toast.error(error.response);
-                }
-            });
+                .then((res) => {
+                    setDepartmentId(res.departmentId);
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        toast.error(error.response);
+                    }
+                });
 
             console.log(departmentId)
 
@@ -86,6 +82,8 @@ function UserListManager() {
             </div>
         )
     }
+
+    if (!currentUser || (currentUser ? currentUser.role != "Manager" : false)) return (<ErrorPage />)
 
     return (
         <div className="">

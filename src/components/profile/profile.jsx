@@ -5,12 +5,15 @@ import ProfileLogic from "./profile-logics";
 import { ToastContainer, toast } from "react-toastify";
 import { Client } from "../../generated/models";
 import moment from "moment";
+import { useNavigate } from "react-router";
+import ErrorPage from "../../pages/error-page";
 
 export default function Profile() {
     let clientService = new Client();
+    var history = useNavigate();
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [test, setTest] = useState(new UserDetail());
-    var { user, getUser, updateUser } = ProfileLogic(currentUser.userId);
+    var { user, getUser, updateUser } = ProfileLogic(currentUser ? currentUser.userId : "");
 
     const [dateOfBirth, setDateOfBirth] = useState();
 
@@ -64,6 +67,7 @@ export default function Profile() {
     }
 
     useEffect(() => {
+        if (!currentUser) return (<ErrorPage />)
         var t = getUser();
         clientService.usersGET(currentUser.userId)
             .then((res) => {
@@ -112,6 +116,8 @@ export default function Profile() {
         console.log(userUpdateForm.dateOfBirth)
         updateUser(currentUser.userId, userUpdateForm);
     }
+
+    if (!currentUser) return (<ErrorPage />)
 
     return (
         <div className="container bootstrap snippet">

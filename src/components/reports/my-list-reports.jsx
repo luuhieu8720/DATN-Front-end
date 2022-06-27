@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import { Form } from "react-bootstrap";
 import ReportLogic from "./report-logics";
+import ErrorPage from "../../pages/error-page";
 
 export default function ListReports() {
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -16,7 +17,7 @@ export default function ListReports() {
     const [isReported, setIsReported] = useState(false);
 
     const [reportForm, setReportForm] = useState(new ReportFormDto({
-        userId: currentUser.userId
+        userId: currentUser ? currentUser.userId : ""
     }));
 
     var { postReport } = ReportLogic();
@@ -101,7 +102,7 @@ export default function ListReports() {
 
     const [reportFilter, setReportFilter] = useState(new ReportsFilter(
         {
-            userId: currentUser.userId,
+            userId: currentUser ? currentUser.userId : "",
             dateTime: new Date()
         }));
 
@@ -155,6 +156,8 @@ export default function ListReports() {
         );
         setItemOffset(newOffset);
     };
+
+    if (!currentUser) return (<ErrorPage />)
 
     return (
         <div>

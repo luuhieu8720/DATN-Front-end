@@ -17,7 +17,7 @@ export default function UserReportsManager() {
         clientService.allPOST(reportFilter)
             .then((res) => {
                 setlistReports(res);
-        console.log(res)
+                console.log(res)
             })
             .catch(function (error) {
                 if (error.response) {
@@ -33,7 +33,7 @@ export default function UserReportsManager() {
 
     const [reportFilter, setReportFilter] = useState(new ReportsFilter({
         dateTime: new Date(),
-        departmentId:"00000000-0000-0000-0000-000000000000"
+        departmentId: "00000000-0000-0000-0000-000000000000"
     }));
 
     const handleChange = (evt) => {
@@ -62,7 +62,7 @@ export default function UserReportsManager() {
                         </Form.Group>
                         <Form.Group className="mb-3 col-3 ms-3">
                             <Form.Label className="ms-3"></Form.Label>
-                            <Button className="" style={{ height: "38px", width: "50%", marginTop:"32px" }}
+                            <Button className="" style={{ height: "38px", width: "50%", marginTop: "32px" }}
                                 onClick={handleFilter} >Filter</Button>
                         </Form.Group>
                     </Form>
@@ -110,9 +110,11 @@ export default function UserReportsManager() {
     const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
+        if (!currentUser) return (<ErrorPage />)
         clientService.usersGET(currentUser.userId)
             .then((res) => {
-                setReportFilter(new ReportsFilter({ ...reportFilter,
+                setReportFilter(new ReportsFilter({
+                    ...reportFilter,
                     departmentId: res.departmentId
                 }))
             })
@@ -158,7 +160,7 @@ export default function UserReportsManager() {
     };
 
     console.log(departments)
-
+    if (!currentUser) return (<ErrorPage />)
     if (currentUser.role != "Manager") return (<ErrorPage />)
     if (!departments || !listReports) return (<p>Loading</p>)
 

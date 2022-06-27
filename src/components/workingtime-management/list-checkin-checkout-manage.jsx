@@ -6,10 +6,13 @@ import { Table, Button } from "react-bootstrap";
 import moment from "moment";
 import { Form } from "react-bootstrap";
 import { useParams } from "react-router";
+import ErrorPage from "../../pages/error-page";
 
 export default function ListCheckinManage() {
     var userId = useParams().id;
-    console.log(useParams())
+
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
     var filterDate = new Date()
     const [listCheckin, setListCheckin] = useState([]);
 
@@ -168,6 +171,8 @@ export default function ListCheckinManage() {
         const newOffset = (event.selected * itemsPerPage) % listCheckin.length;
         setItemOffset(newOffset);
     };
+
+    if ( !currentUser && (currentUser ? (currentUser.role != "Admin" && currentUser.role != "Manager") : true)) return (<ErrorPage />)
 
     return (
         <div>

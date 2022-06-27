@@ -270,7 +270,10 @@ export default function ErrorPage() {
             </svg>
 
             <p id="errorText">O-o-oh! Something broke.</p>
-            <Button onClick={() => { history("/") }}>Go Back</Button>
+            <div className="row">
+                <Button className="col-4" onClick={() => { history("/login") }}>Login</Button>
+                <Button className="col-7 ms-2" onClick={() => { history("/") }}>Homepage</Button>
+            </div>
         </main>
     )
 }

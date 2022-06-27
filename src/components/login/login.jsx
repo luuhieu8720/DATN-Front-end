@@ -28,6 +28,15 @@ function Login() {
 
     return (
         <div>
+            <style
+                dangerouslySetInnerHTML={{
+                    __html: `
+                        i:hover {
+                                color: #4CAF50;
+                            }
+                    `
+                }}
+            />
             <body className="align" style={{ backgroundColor: "#1d1e1f" }}>
                 <h1 className="text-light mt--5">Login</h1>
                 <div className="grid">
@@ -45,8 +54,7 @@ function Login() {
                     <Button type="submit" className="mt-3 submit-login" onClick={doLogin}>
                         Submit
                     </Button>
-                    <p className="text-center text-light">Not a member? <Link to="/">Sign up now</Link> <svg className="icon">
-                    </svg></p>
+                    <p className="text-center text-light">Forget your password? <i>Recreate</i></p>
 
                 </div>
             </body>

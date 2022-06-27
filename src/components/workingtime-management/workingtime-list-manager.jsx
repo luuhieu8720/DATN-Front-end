@@ -5,9 +5,11 @@ import { ToastContainer, toast } from "react-toastify";
 import { Form } from "react-bootstrap";
 import { Button, Table } from "react-bootstrap";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ErrorPage from "../../pages/error-page";
 
 export default function UsersWorkingTimeManager() {
+    var history = useNavigate();
     const [workingTimeList, setWorkingTimeList] = useState([]);
 
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -98,6 +100,7 @@ export default function UsersWorkingTimeManager() {
     const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
+        if (!currentUser) return (<ErrorPage />)
         clientService.usersGET(currentUser.userId)
             .then((res) => {
                 setWorkingTimeFilter({ ...workingTimeFilter, departmentId: res.departmentId })
@@ -133,6 +136,8 @@ export default function UsersWorkingTimeManager() {
     };
 
     if (!workingTimeList) return (<p>Loading</p>)
+
+    if (!currentUser || (currentUser ? currentUser.role != "Manager" : true)) return (<ErrorPage />)
 
     return (
         <div>

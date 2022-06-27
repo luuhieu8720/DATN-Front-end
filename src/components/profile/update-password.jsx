@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Button, Form, FormText } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import PasswordLogic from "./password-logics";
+import ErrorPage from "../../pages/error-page";
 
 export default function UpdatePassword() {
     var { updatePassword } = PasswordLogic();
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const [updatePasswordForm, setUpdatePasswordForm] = useState({
         oldPassword: "",
@@ -24,6 +26,8 @@ export default function UpdatePassword() {
     const handleSubmit = () => {
         updatePassword(updatePasswordForm);
     }
+
+     if (!currentUser) return (<ErrorPage />)
 
     return (
         <div className="container bootstrap snippet mt-4">

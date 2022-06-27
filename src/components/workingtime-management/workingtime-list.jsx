@@ -6,9 +6,12 @@ import { Form } from "react-bootstrap";
 import { Button, Table } from "react-bootstrap";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import ErrorPage from "../../pages/error-page";
 
 export default function UsersWorkingTime() {
     const [workingTimeList, setWorkingTimeList] = useState([]);
+
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const handleFilter = () => {
         clientService.filter3(workingTimeFilter)
@@ -159,8 +162,9 @@ export default function UsersWorkingTime() {
         setItemOffset(newOffset);
     };
 
-    console.log(departments)
     if (!departments || !workingTimeList) return (<p>Loading</p>)
+
+    if (!currentUser || (currentUser ? currentUser.role != "Admin" : false)) return (<ErrorPage />)
 
     return (
         <div>

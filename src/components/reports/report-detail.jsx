@@ -10,6 +10,7 @@ import ReportLogic from "./report-logics";
 import { Modal } from "react-bootstrap";
 import CommentLogics from "../reports-management/comment-logics";
 import CommentThumbnail from "./comment-thumbnail";
+import ErrorPage from "../../pages/error-page";
 
 export default function ReportDetailPage() {
     const { comment } = CommentLogics();
@@ -81,7 +82,7 @@ export default function ReportDetailPage() {
 
     const [commentForm, setCommentForm] = useState(new CommentForm({
         reportId: id.id,
-        userId: currentUser.userId
+        userId: currentUser ? currentUser.userId : ""
     }))
 
     useEffect(() => {
@@ -109,7 +110,12 @@ export default function ReportDetailPage() {
         </div>
     )) : (<></>);
 
+    if (!currentUser) return (<ErrorPage />)
+
+    if (currentUser.role != "Admin" || currentUser.role != "Manager") return (<ErrorPage />)
+
     if (!report || !report.user || !report.comments) return (<p>Loading</p>)
+
     return (
         <div>
             <ToastContainer />

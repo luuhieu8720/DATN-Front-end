@@ -6,8 +6,10 @@ import { Table, Button, Modal, Form } from "react-bootstrap";
 import moment from "moment";
 import RequestLogic from "../requests/request-logics";
 import ErrorPage from "../../pages/error-page";
+import { useNavigate } from "react-router";
 
 export default function RequestsListManager() {
+    var history = useNavigate();
     const [dateTime, setDateTime] = useState();
     const [currentItem, setCurrentItem] = useState(new FormRequestDetail());
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -192,6 +194,7 @@ export default function RequestsListManager() {
     const [itemOffset, setItemOffset] = useState(0);
 
     useEffect(() => {
+         if (!currentUser) return (<ErrorPage />)
         clientService.usersGET(currentUser.userId)
             .then((res) => {
                 setFilterRequest({ ...filterRequest, departmentId: res.departmentId })
@@ -228,6 +231,7 @@ export default function RequestsListManager() {
         setItemOffset(newOffset);
     };
 
+    if (!currentUser) return (<ErrorPage />)
     if (currentUser.role != "Manager") return (<ErrorPage />)
 
     return (

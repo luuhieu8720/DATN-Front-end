@@ -108,7 +108,7 @@ export default function DepartmentsList() {
         setItemOffset(newOffset);
     };
 
-    if (currentUser.role != "Admin") return (<ErrorPage />)
+    if (!currentUser || (currentUser ? currentUser.role != "Admin" : false)) return (<ErrorPage />)
     return (
         <div>
             <ToastContainer />

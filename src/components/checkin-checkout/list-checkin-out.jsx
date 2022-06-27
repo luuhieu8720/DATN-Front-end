@@ -4,10 +4,14 @@ import { Client, WorkingTimeFilter } from "../../generated/models";
 import { ToastContainer, toast } from "react-toastify";
 import { Table, Button } from "react-bootstrap";
 import moment from "moment";
+import ErrorPage from "../../pages/error-page";
 import { Form } from "react-bootstrap";
 
 export default function ListCheckin(props) {
     var userId = JSON.parse(localStorage.getItem("currentUser")).userId;
+
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
     const [listCheckin, setListCheckin] = useState([]);
 
     const [totalPunished, setTotalPunished] = useState(0);
@@ -162,6 +166,8 @@ export default function ListCheckin(props) {
         const newOffset = (event.selected * itemsPerPage) % listCheckin.length;
         setItemOffset(newOffset);
     };
+
+    if ( !currentUser ) return (<ErrorPage />)
 
     return (
         <div>

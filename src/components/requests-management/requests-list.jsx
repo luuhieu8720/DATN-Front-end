@@ -247,7 +247,7 @@ export default function RequestsList() {
         setItemOffset(newOffset);
     };
 
-    if (currentUser.role != "Admin") return (<ErrorPage />)
+    if (!currentUser || currentUser.role != "Admin") return (<ErrorPage />)
     return (
         <div>
             <ToastContainer />

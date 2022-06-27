@@ -8,9 +8,12 @@ import './css/user-list.css';
 import ReactPaginate from 'react-paginate';
 import { Modal, Form } from "react-bootstrap";
 import moment from "moment";
+import { Link } from "react-router-dom";
+import ErrorPage from "../../pages/error-page";
 
 function UserList() {
     const [userList, setUserList] = useState([]);
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let clientServices = new Client();
 
     const itemsPerPage = 4;
@@ -80,14 +83,6 @@ function UserList() {
     var history = useNavigate();
     useEffect(
         () => {
-            var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-            if (currentUser.role != "Admin" && currentUser.role != "Manager") {
-                alert("You do not have access to this page");
-                setTimeout(() => {
-                    history("/");
-                }, 1000);
-            }
-
             clientServices.usersAll()
                 .then((res) => {
                     setUserList(res);
@@ -141,6 +136,10 @@ function UserList() {
             </div>
         )
     }
+
+    if (!currentUser) return (<ErrorPage />)
+
+    if (currentUser.role != "Admin") return (<ErrorPage />)
 
     return (
         <div className="">

@@ -35,7 +35,7 @@ export default function ReportLogic() {
             .then(() => {
                 toast.success("Submitted report successfully");
                 setTimeout(() => {
-                    toast.success("Submitted report successfully");
+                    window.location.reload();
                 }, 3000);
             })
             .catch((error) => {

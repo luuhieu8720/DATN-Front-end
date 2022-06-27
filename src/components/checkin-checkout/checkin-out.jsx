@@ -5,11 +5,16 @@ import CheckInOutLogic from './checkin-out-logic';
 import { ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import { useState } from 'react';
+import ErrorPage from '../../pages/error-page';
 import ListCheckin from './list-checkin-out';
+import { useNavigate } from 'react-router';
 
 function CheckInOutComponent() {
+    var history = useNavigate();
     var { datetimeLocalInput, checkIn, checkOut, checkTime } = CheckInOutLogic();
     let clientService = new Client();
+
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const [isCheckedIn, setIsCheckedIn] = useState(false);
 
@@ -48,6 +53,7 @@ function CheckInOutComponent() {
 
     useEffect(() => {
         currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
         var userId = currentUser.userId;
         clientService.validate(userId)
             .then((res) => {
@@ -99,6 +105,9 @@ function CheckInOutComponent() {
         }
 
     }, [result.userId]);
+
+    if ( !currentUser ) return (<ErrorPage />)
+
     return (
         <div className='mt-4'>
             <h3>Today</h3>
