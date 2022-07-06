@@ -15,7 +15,8 @@ export default function ListRequests() {
 
     const [createForm, setCreateForm] = useState(new FormRequestForm({
         statusId: 1,
-        userId: currentUser.userId
+        userId: currentUser.userId,
+        requestDate: new Date()
     }));
 
     const [show, setShow] = useState(false);
@@ -62,7 +63,7 @@ export default function ListRequests() {
             .then((res) => {
                 setListRequests(res);
                 console.log(listRequests)
-                
+
             })
             .catch(function (error) {
                 if (error.response) {
@@ -215,7 +216,8 @@ export default function ListRequests() {
                             <option value="2">Off morning</option>
                             <option value="3">Off afternoon</option>
                             <option value="4">Off by hour</option>
-                            <option value="5">Lately checkin-out</option>
+                            <option value="5">Lately checkin</option>
+                            <option value="6">Early checkout</option>
                         </Form.Select>
                         <Form.Group className="mt-2 col-3">
                             <Form.Label><h5>Date off</h5></Form.Label>

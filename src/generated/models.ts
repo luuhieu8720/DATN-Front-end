@@ -49,14 +49,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TokenResponse.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = TokenResponse.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<TokenResponse>(null as any);
@@ -71,7 +71,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -86,14 +87,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = AuthenUser.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = AuthenUser.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<AuthenUser>(null as any);
@@ -112,7 +113,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -127,11 +129,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -146,7 +148,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -161,21 +164,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CommentItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(CommentItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<CommentItem[]>(null as any);
@@ -193,7 +196,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -208,14 +212,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CommentDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = CommentDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<CommentDetail>(null as any);
@@ -237,7 +241,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -252,11 +257,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -271,7 +276,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -286,21 +292,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(DepartmentItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(DepartmentItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<DepartmentItem[]>(null as any);
@@ -319,7 +325,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -334,11 +341,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -356,7 +363,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -371,14 +379,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = DepartmentDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = DepartmentDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<DepartmentDetail>(null as any);
@@ -400,7 +408,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -415,11 +424,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -434,7 +443,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -449,21 +459,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(FormStatusItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(FormStatusItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<FormStatusItem[]>(null as any);
@@ -482,7 +492,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -497,11 +508,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -519,7 +530,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -534,14 +546,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = FormStatusDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = FormStatusDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<FormStatusDetail>(null as any);
@@ -563,7 +575,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -578,11 +591,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -614,11 +627,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -652,11 +665,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -675,7 +688,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -690,11 +704,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -709,7 +723,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -724,21 +739,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ReportItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(ReportItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<ReportItem[]>(null as any);
@@ -757,7 +772,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -772,11 +788,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -794,7 +810,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -809,14 +826,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ReportDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = ReportDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<ReportDetail>(null as any);
@@ -838,7 +855,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -853,11 +871,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -872,7 +890,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -887,21 +906,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ReportItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(ReportItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<ReportItem[]>(null as any);
@@ -920,7 +939,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -936,21 +956,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ReportItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(ReportItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<ReportItem[]>(null as any);
@@ -965,7 +985,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -980,21 +1001,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(FormRequestItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(FormRequestItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<FormRequestItem[]>(null as any);
@@ -1013,7 +1034,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1028,11 +1050,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1050,7 +1072,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1065,14 +1088,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = FormRequestDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = FormRequestDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<FormRequestDetail>(null as any);
@@ -1094,7 +1117,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1109,11 +1133,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1132,7 +1156,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1148,21 +1173,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(FormRequestDetail.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(FormRequestDetail.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<FormRequestDetail[]>(null as any);
@@ -1181,7 +1206,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1197,21 +1223,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(FormRequestDetail.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(FormRequestDetail.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<FormRequestDetail[]>(null as any);
@@ -1233,7 +1259,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1248,11 +1275,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1271,7 +1298,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1287,15 +1315,15 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
+
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<string>(null as any);
@@ -1310,7 +1338,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1325,21 +1354,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TimeKeepingItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(TimeKeepingItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<TimeKeepingItem[]>(null as any);
@@ -1358,7 +1387,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1373,11 +1403,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1395,7 +1425,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1410,14 +1441,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TimeKeepingDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = TimeKeepingDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<TimeKeepingDetail>(null as any);
@@ -1436,7 +1467,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1452,21 +1484,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TimeKeepingItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(TimeKeepingItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<TimeKeepingItem[]>(null as any);
@@ -1484,7 +1516,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1499,21 +1532,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TimeKeepingItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(TimeKeepingItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<TimeKeepingItem[]>(null as any);
@@ -1533,7 +1566,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1548,14 +1582,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TimeKeepingDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = TimeKeepingDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<TimeKeepingDetail>(null as any);
@@ -1579,7 +1613,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1594,11 +1629,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1613,7 +1648,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1628,21 +1664,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(UserItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(UserItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<UserItem[]>(null as any);
@@ -1661,7 +1697,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1676,11 +1713,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1700,7 +1737,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1715,21 +1753,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(UserItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(UserItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<UserItem[]>(null as any);
@@ -1747,7 +1785,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1762,14 +1801,14 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserDetail.fromJS(resultData200);
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = UserDetail.fromJS(resultData200);
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<UserDetail>(null as any);
@@ -1787,7 +1826,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "DELETE",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
             }
         };
 
@@ -1801,11 +1841,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1827,7 +1867,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1842,11 +1883,11 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+                return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<void>(null as any);
@@ -1865,7 +1906,8 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1881,21 +1923,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(WorkingTimeItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(WorkingTimeItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<WorkingTimeItem[]>(null as any);
@@ -1915,7 +1957,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1930,21 +1973,21 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(WorkingTimeItem.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(WorkingTimeItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<WorkingTimeItem[]>(null as any);
@@ -1964,7 +2007,8 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: { "Authorization": "Bearer " + currentUser.token,
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1979,15 +2023,15 @@ export class Client {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
+
+                return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<number>(null as any);

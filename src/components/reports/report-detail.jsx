@@ -112,9 +112,10 @@ export default function ReportDetailPage() {
 
     if (!currentUser) return (<ErrorPage />)
 
-    if (currentUser.role != "Admin" || currentUser.role != "Manager") return (<ErrorPage />)
 
     if (!report || !report.user || !report.comments) return (<p>Loading</p>)
+
+    if (currentUser.role != "Admin" && currentUser.role != "Manager" && currentUser.userId != report.userId) return (<ErrorPage />)
 
     return (
         <div>
@@ -130,10 +131,10 @@ export default function ReportDetailPage() {
                                         <img src={report.user.avatarUrl ? report.user.avatarUrl : "/images/avatardefault.png"}
                                             className="rounded-circle img-fluid" style={{ width: "100px" }} />
                                     </div>
-                                    <h4 className="mb-2">{report.user.firstName + " " + report.user.lastName}</h4>
+                                    <h4 className="mb-2">{ report.user ? report.user.firstName + " " + report.user.lastName : ""}</h4>
                                     <p className="text-muted mb-2">
                                         Department:
-                                        {report.user.department ? report.user.department.name : " "}</p>
+                                        { report.user.department ? report.user.department.name : " "}</p>
                                     <p className="text-muted mb-2">
                                         Reported date: {moment(report.createdTime).format('DD-MM-YYYY')}</p>
                                     <p className="text-muted mb-2">
