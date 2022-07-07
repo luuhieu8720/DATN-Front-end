@@ -17,7 +17,7 @@ export class Client {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.http = http ? http : window as any;
-        this.baseUrl = "https://timekeeping-ltlh.herokuapp.com";
+        this.baseUrl = "http://timekeeping-ltlh.herokuapp.com";
     }
 
     /**
@@ -34,6 +34,7 @@ export class Client {
             body: content_,
             method: "POST",
             headers: {
+                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -72,7 +73,7 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Authorization": "Bearer " + currentUser.token,
+                
                 "Accept": "text/plain"
             }
         };
@@ -113,8 +114,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -148,8 +148,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -196,8 +195,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -241,8 +239,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -276,8 +273,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -325,8 +321,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -363,8 +358,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -408,8 +402,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -443,8 +436,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -492,8 +484,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -530,8 +521,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -575,8 +565,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -613,7 +602,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "POST",
-            headers: {
+            headers: { "Authorization": "Bearer " + currentUser.token,
             }
         };
 
@@ -650,7 +639,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -679,8 +668,11 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    update(body: UpdatePasswordForm | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/password/update";
+    update(id: string, body: UpdatePasswordForm | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/password/update/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -688,8 +680,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -723,8 +714,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -772,8 +762,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -810,8 +799,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -855,8 +843,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -890,8 +877,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -939,8 +925,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -985,8 +970,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1034,8 +1018,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1072,8 +1055,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1117,8 +1099,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1156,8 +1137,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1206,8 +1186,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1259,8 +1238,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1298,8 +1276,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1338,8 +1315,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1387,8 +1363,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1425,8 +1400,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1467,8 +1441,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1516,8 +1489,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1566,8 +1538,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1613,8 +1584,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1648,8 +1618,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1697,8 +1666,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1737,8 +1705,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1785,8 +1752,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -1826,8 +1792,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "DELETE",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
             }
         };
 
@@ -1867,8 +1832,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "PUT",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1906,8 +1870,7 @@ export class Client {
         let options_: RequestInit = {
             body: content_,
             method: "POST",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
@@ -1957,8 +1920,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -2007,8 +1969,7 @@ export class Client {
 
         let options_: RequestInit = {
             method: "GET",
-            headers: {
-                "Authorization": "Bearer " + currentUser.token,
+            headers: { "Authorization": "Bearer " + currentUser.token,
                 "Accept": "text/plain"
             }
         };
@@ -4119,7 +4080,7 @@ export class UserFormCreate implements IUserFormCreate {
     email!: string;
     password!: string;
     departmentId?: string | undefined;
-    role?: Role;
+    role!: Role;
 
     constructor(data?: IUserFormCreate) {
         if (data) {
@@ -4181,7 +4142,7 @@ export interface IUserFormCreate {
     email: string;
     password: string;
     departmentId?: string | undefined;
-    role?: Role;
+    role: Role;
 }
 
 export class UserFormUpdate implements IUserFormUpdate {

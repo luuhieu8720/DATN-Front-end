@@ -24,7 +24,7 @@ export default function UpdatePassword() {
     }
 
     const handleSubmit = () => {
-        updatePassword(updatePasswordForm);
+        updatePassword(currentUser.userId, updatePasswordForm);
     }
 
      if (!currentUser) return (<ErrorPage />)

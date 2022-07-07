@@ -7,8 +7,8 @@ let clientService = new Client();
 
 export default function PasswordLogic() {
     const history = useNavigate();
-    const updatePassword = (updatePasswordForm: UpdatePasswordForm) => {
-        clientService.update(updatePasswordForm)
+    const updatePassword = (id: string, updatePasswordForm: UpdatePasswordForm) => {
+        clientService.update(id, updatePasswordForm)
             .then(() => {
                 toast.success("Success");
                 setTimeout(() => {
