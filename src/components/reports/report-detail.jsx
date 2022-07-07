@@ -175,7 +175,7 @@ export default function ReportDetailPage() {
                 </div>
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Create request</Modal.Title>
+                        <Modal.Title>Comment</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
