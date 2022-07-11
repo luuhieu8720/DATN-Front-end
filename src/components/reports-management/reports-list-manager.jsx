@@ -56,7 +56,7 @@ export default function UserReportsManager() {
                     <Form className="row">
                         <Form.Label className="ms-3"><h4>Filter</h4></Form.Label>
                         <Form.Group className="mb-3 col-3 ms-3">
-                            <Form.Label className="ms-1">By month</Form.Label>
+                            <Form.Label className="ms-1">By day</Form.Label>
                             <Form.Control type="date" name="dateTime"
                                 onChange={handleChange} value={moment(reportFilter.dateTime).format("YYYY-MM-DD")} />
                         </Form.Group>

@@ -118,7 +118,7 @@ export default function ListReports() {
 
     useEffect(() => {
         numberedItem = 0;
-        clientService.allGET()
+        clientService.allGET(currentUser.userId)
             .then((res) => {
                 setListRequests(res);
             })
