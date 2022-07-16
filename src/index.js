@@ -12,7 +12,7 @@ if (user !== null && user !== ""){
   axios.defaults.headers.common['Authorization'] = "Bearer " + user.token;
 }
 
-axios.defaults.baseURL="https://localhost:44304/api";
+axios.defaults.baseURL="https://datn-timekeeping.herokuapp.com";
 
 ReactDOM.render(
   <React.StrictMode>
