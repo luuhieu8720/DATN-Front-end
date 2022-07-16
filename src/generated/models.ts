@@ -17,7 +17,7 @@ export class Client {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.http = http ? http : window as any;
-        this.baseUrl = "http://datn-timekeeping.herokuapp.com";
+        this.baseUrl = "https://datn-timekeeping.herokuapp.com";
     }
 
     /**
