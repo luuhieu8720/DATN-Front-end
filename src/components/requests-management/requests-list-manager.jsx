@@ -20,6 +20,14 @@ export default function RequestsListManager() {
 
     const [show, setShow] = useState(false);
 
+    const [selectedTypeValue, setSelectedTypeValue] = useState();
+
+    const [selectedStatusValue, setSelectedStatusValue] = useState();
+
+    const [requestType, setRequestType] = useState([])
+
+    const [status, setStatus] = useState([])
+
     const handleReject = () => {
         confirm(confirmRequestId, new FormRequestConfirm({ statusId: 3 }));
         setShow(false);
@@ -39,7 +47,27 @@ export default function RequestsListManager() {
 
         setFilterRequest({ ...filterRequest, dateTime: moment(value) });
 
+        if (evt.target.name == "typeId") {
+            setSelectedTypeValue(value);
+            if (value == "None") {
+                setFilterRequest({ ...filterRequest, typeId: "" })
+            }
+            else {
+                setFilterRequest({ ...filterRequest, typeId: value })
+            }
+        }
+        else if (evt.target.name == "formStatusId") {
+            setSelectedStatusValue(value);
+            if (value == "None") {
+                setFilterRequest({ ...filterRequest, formStatusId: "" })
+            }
+            else {
+                setFilterRequest({ ...filterRequest, formStatusId: value })
+            }
+        }
+
         setDateTime(moment(filterRequest.dateTime).format("YYYY-MM-DD"));
+    
     }
 
     const handleFilter = () => {
@@ -72,6 +100,30 @@ export default function RequestsListManager() {
                             <Form.Control value={moment(filterRequest.dateTime).format("YYYY-MM-DD")} type="date" name="dateTime"
                                 onChange={handleChangeFilter} />
 
+                        </Form.Group>
+                        <Form.Group className="mb-3 col-3 ms-3" style={{ width: "200px" }}>
+                            <Form.Label className="ms-1">By type</Form.Label>
+                            <Form.Select aria-label="Default select example"
+                                onChange={handleChangeFilter} name="typeId" value={selectedTypeValue}>
+                                <option value={"None"}>None</option>
+                                {
+                                    requestType.map((option, index) => {
+                                        return (<option key={option.typeName} value={option.id}>{option.typeName}</option>)
+                                    })
+                                }
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3 col-3 ms-3" style={{ width: "200px" }}>
+                            <Form.Label className="ms-1">By status</Form.Label>
+                            <Form.Select aria-label="Default select example"
+                                onChange={handleChangeFilter} name="formStatusId" value={selectedStatusValue}>
+                                <option value={"None"}>None</option>
+                                {
+                                    status.map((option, index) => {
+                                        return (<option key={option.status} value={option.id}>{option.status}</option>)
+                                    })
+                                }
+                            </Form.Select>
                         </Form.Group>
                         <Button className="col-1" style={{ height: "35px", marginTop: "34px" }}
                             onClick={handleFilter} >Filter</Button>
@@ -215,12 +267,33 @@ export default function RequestsListManager() {
                     toast.error(error.response);
                 }
             });
+
+        clientService.requesttypeAll()
+            .then((res) => {
+                setRequestType(res);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+
+        clientService.formstatusesAll()
+            .then((res) => {
+                setStatus(res);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
         console.log(`Loading items from ${itemOffset} to ${endOffset}`);
         setCurrentItems(listRequests.slice(itemOffset, endOffset));
         setPageCount(Math.ceil(listRequests.length / itemsPerPage));
-    }, [itemOffset, itemsPerPage, listRequests.length, filterRequest.departmentId]);
+    }, [itemOffset, itemsPerPage, listRequests.length, filterRequest.departmentId,
+        filterRequest.typeId, filterRequest.formStatusId]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {

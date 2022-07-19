@@ -160,8 +160,11 @@ export default function ReportDetailPage() {
                                     <Form>
                                         <Form.Group className="mt-5 mb-3" >
                                             <img src={report.uploadFileLink ? report.uploadFileLink : "/images/avatardefault.png"}
-                                                className="img-fluid" style={{ margin: "auto", display: "block", width: "400px", borderRadius: "10px" }}
+                                                className="img-fluid" style={{ margin: "auto", display: "block", width: "400px", height: "300px", borderRadius: "10px" }}
                                             />
+                                            <div className="text-center">
+<a href={report.uploadFileLink ? report.uploadFileLink : ""}>View image</a>
+</div>
                                             <Form.Control style={{ width: "40%", margin: "5px auto" }} type="file" hidden={currentUser.userId != report.user.id || currentUser.role != "Employee"}
                                                 className="text-center center-block file-upload mt-2" name="uploadFileLink"
                                                 onChange={handleChangeImage} />

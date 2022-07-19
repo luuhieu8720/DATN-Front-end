@@ -614,7 +614,6 @@ export class Client {
         let options_: RequestInit = {
             method: "POST",
             headers: {
-                "Authorization": "Bearer " + currentUser.token,
             }
         };
 
@@ -652,7 +651,6 @@ export class Client {
             body: content_,
             method: "POST",
             headers: {
-                "Authorization": "Bearer " + currentUser.token,
                 "Content-Type": "application/json-patch+json",
             }
         };
@@ -1294,6 +1292,132 @@ export class Client {
     }
 
     /**
+     * @return Success
+     */
+    requesttypeAll(): Promise<RequestTypeItem[]> {
+        let url_ = this.baseUrl + "/api/requesttype";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRequesttypeAll(_response);
+        });
+    }
+
+    protected processRequesttypeAll(response: Response): Promise<RequestTypeItem[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(RequestTypeItem.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RequestTypeItem[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    requesttypePOST(body: RequestTypeForm | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/requesttype";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
+                "Content-Type": "application/json-patch+json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRequesttypePOST(_response);
+        });
+    }
+
+    protected processRequesttypePOST(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    requesttypePUT(id: number, body: RequestTypeForm | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/requesttype/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
+                "Content-Type": "application/json-patch+json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRequesttypePUT(_response);
+        });
+    }
+
+    protected processRequesttypePUT(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @param body (optional) 
      * @return Success
      */
@@ -1407,6 +1531,45 @@ export class Client {
     }
 
     protected processTimekeepingPUT(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    timekeepingDELETE(id: string | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/timekeeping?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + currentUser.token,
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processTimekeepingDELETE(_response);
+        });
+    }
+
+    protected processTimekeepingDELETE(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3744,6 +3907,7 @@ export class RequestsFilter implements IRequestsFilter {
     departmentId?: string | undefined;
     userId?: string | undefined;
     formStatusId?: number | undefined;
+    typeId?: number | undefined;
     dateTime?: Date | undefined;
 
     constructor(data?: IRequestsFilter) {
@@ -3760,6 +3924,7 @@ export class RequestsFilter implements IRequestsFilter {
             this.departmentId = _data["departmentId"];
             this.userId = _data["userId"];
             this.formStatusId = _data["formStatusId"];
+            this.typeId = _data["typeId"];
             this.dateTime = _data["dateTime"] ? new Date(_data["dateTime"].toString()) : <any>undefined;
         }
     }
@@ -3776,6 +3941,7 @@ export class RequestsFilter implements IRequestsFilter {
         data["departmentId"] = this.departmentId;
         data["userId"] = this.userId;
         data["formStatusId"] = this.formStatusId;
+        data["typeId"] = this.typeId;
         data["dateTime"] = this.dateTime ? this.dateTime.toISOString() : <any>undefined;
         return data;
     }
@@ -3785,6 +3951,7 @@ export interface IRequestsFilter {
     departmentId?: string | undefined;
     userId?: string | undefined;
     formStatusId?: number | undefined;
+    typeId?: number | undefined;
     dateTime?: Date | undefined;
 }
 
@@ -3822,6 +3989,86 @@ export class FormRequestConfirm implements IFormRequestConfirm {
 
 export interface IFormRequestConfirm {
     statusId?: number;
+}
+
+export class RequestTypeItem implements IRequestTypeItem {
+    id?: number;
+    typeName?: string | undefined;
+
+    constructor(data?: IRequestTypeItem) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.typeName = _data["typeName"];
+        }
+    }
+
+    static fromJS(data: any): RequestTypeItem {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestTypeItem();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["typeName"] = this.typeName;
+        return data;
+    }
+}
+
+export interface IRequestTypeItem {
+    id?: number;
+    typeName?: string | undefined;
+}
+
+export class RequestTypeForm implements IRequestTypeForm {
+    id?: number;
+    typeName?: string | undefined;
+
+    constructor(data?: IRequestTypeForm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.typeName = _data["typeName"];
+        }
+    }
+
+    static fromJS(data: any): RequestTypeForm {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestTypeForm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["typeName"] = this.typeName;
+        return data;
+    }
+}
+
+export interface IRequestTypeForm {
+    id?: number;
+    typeName?: string | undefined;
 }
 
 export class TimeKeepingForm implements ITimeKeepingForm {
