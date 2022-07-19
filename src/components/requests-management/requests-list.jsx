@@ -153,7 +153,7 @@ export default function RequestsList() {
                             <tr>
                                 <th style={{ width: "50px" }}>#</th>
                                 <th style={{ width: "250px" }}>Content</th>
-                                <th style={{ width: "250px" }}>Reason</th>
+                                <th style={{ width: "250px" }}>User</th>
                                 <th style={{ width: "150px" }}>Request type</th>
                                 <th style={{ width: "150px" }}>Date off</th>
                                 <th style={{ width: "100px" }}>Status</th>
@@ -223,7 +223,7 @@ export default function RequestsList() {
                                         <tr>
                                             <td>{index + 1}</td>
                                             <td>{item.content}</td>
-                                            <td>{item.reason}</td>
+                                            <td>{item.user.username}</td>
                                             <td>{item.requestType.typeName}</td>
                                             <td>{moment(item.requestDate).format('DD-MM-YYYY')}</td>
                                             <td>{item.formStatus.status}</td>
