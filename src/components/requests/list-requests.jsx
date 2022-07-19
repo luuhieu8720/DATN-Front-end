@@ -25,14 +25,15 @@ export default function ListRequests() {
     const handleShow = () => setShow(true);
 
     const handleSubmit = () => {
-        postRequest(createForm);
+        console.log(createForm)
+       postRequest(createForm);
     }
 
     const handleChangeCreate = (evt) => {
         var value = evt.target.value;
 
         if (evt.target.name == "requestDate") {
-            setCreateForm({ ...createForm, requestDate: moment(value) })
+            setCreateForm({ ...createForm, requestDate: moment(value.toLocaleString())})
         }
 
         else if (evt.target.name == "requestTypeId") {

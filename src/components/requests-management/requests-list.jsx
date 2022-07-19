@@ -32,7 +32,15 @@ export default function RequestsList() {
 
     const [departments, setDepartments] = useState([])
 
+    const [requestType, setRequestType] = useState([])
+
+    const [status, setStatus] = useState([])
+
     const [selectedValue, setSelectedValue] = useState()
+
+    const [selectedTypeValue, setSelectedTypeValue] = useState()
+
+    const [selectedStatusValue, setSelectedStatusValue] = useState()
 
     const handleChangeFilter = (evt) => {
         var value = evt.target.value;
@@ -47,6 +55,24 @@ export default function RequestsList() {
             }
             else {
                 setFilterRequest({ ...filterRequest, departmentId: value })
+            }
+        }
+        else if (evt.target.name == "typeId") {
+            setSelectedTypeValue(value);
+            if (value == "None") {
+                setFilterRequest({ ...filterRequest, typeId: "" })
+            }
+            else {
+                setFilterRequest({ ...filterRequest, typeId: value })
+            }
+        }
+        else if (evt.target.name == "formStatusId") {
+            setSelectedStatusValue(value);
+            if (value == "None") {
+                setFilterRequest({ ...filterRequest, formStatusId: "" })
+            }
+            else {
+                setFilterRequest({ ...filterRequest, formStatusId: value })
             }
         }
 
@@ -77,7 +103,7 @@ export default function RequestsList() {
                 <div className="mt-4" style={{ width: "109%", marginLeft: "-1%" }}>
                     <h3 className="text-center">User requests list</h3>
                     <Form className="row ms-3">
-                        <Form.Group className="mb-3 col-3">
+                        <Form.Group className="mb-3 col-3" style={{ width: "200px" }}>
                             <Form.Label>Filter by month</Form.Label>
                             <Form.Control value={moment(filterRequest.dateTime).format("YYYY-MM-DD")} type="date" name="dateTime"
                                 onChange={handleChangeFilter} />
@@ -91,6 +117,30 @@ export default function RequestsList() {
                                 {
                                     departments.map((option, index) => {
                                         return (<option key={option.name} value={option.id}>{option.name}</option>)
+                                    })
+                                }
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3 col-3 ms-3" style={{ width: "200px" }}>
+                            <Form.Label className="ms-1">By type</Form.Label>
+                            <Form.Select aria-label="Default select example"
+                                onChange={handleChangeFilter} name="typeId" value={selectedTypeValue}>
+                                <option value={"None"}>None</option>
+                                {
+                                    requestType.map((option, index) => {
+                                        return (<option key={option.typeName} value={option.id}>{option.typeName}</option>)
+                                    })
+                                }
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3 col-3 ms-3" style={{ width: "200px" }}>
+                            <Form.Label className="ms-1">By status</Form.Label>
+                            <Form.Select aria-label="Default select example"
+                                onChange={handleChangeFilter} name="formStatusId" value={selectedStatusValue}>
+                                <option value={"None"}>None</option>
+                                {
+                                    status.map((option, index) => {
+                                        return (<option key={option.status} value={option.id}>{option.status}</option>)
                                     })
                                 }
                             </Form.Select>
@@ -235,8 +285,28 @@ export default function RequestsList() {
                     toast.error(error.response);
                 }
             });
+
+        clientService.requesttypeAll()
+            .then((res) => {
+                setRequestType(res);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
+
+        clientService.formstatusesAll()
+            .then((res) => {
+                setStatus(res);
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    toast.error(error.response);
+                }
+            });
     }, [itemOffset, itemsPerPage, listRequests.length, filterRequest.departmentId,
-        departments.length, filterRequest.departmentId]);
+        departments.length, filterRequest.departmentId, filterRequest.typeId, filterRequest.formStatusId]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
