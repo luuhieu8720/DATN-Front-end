@@ -133,8 +133,8 @@ export default function ReportDetailPage() {
                                     </div>
                                     <h4 className="mb-2">{ report.user ? report.user.firstName + " " + report.user.lastName : ""}</h4>
                                     <p className="text-muted mb-2">
-                                        Department:
-                                        { report.user.department ? report.user.department.name : " "}</p>
+                                        Department: { report.user.department ? report.user.department.name : " "}
+                                        </p>
                                     <p className="text-muted mb-2">
                                         Reported date: {moment(report.createdTime).format('DD-MM-YYYY')}</p>
                                     <p className="text-muted mb-2">
